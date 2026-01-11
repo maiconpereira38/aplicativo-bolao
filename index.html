@@ -66,6 +66,7 @@
 
    <script>
   const valorCota = 20;
+  const senhaAdmin = "1234"; // você pode mudar depois
 
   const times = [
     { nome: "Flamengo", cotas: 77, premio: 5000 },
@@ -115,37 +116,70 @@
     const time = times[index];
 
     if (time.cotas === 0) {
-      alert("Cotas esgotadas para este time.");
+      alert("Cotas esgotadas.");
       return;
     }
 
-    const confirmar = confirm(
-      `CONFIRMAR COMPRA\n\n` +
+    alert(
+      `PAGAMENTO VIA PIX\n\n` +
       `Time: ${time.nome}\n` +
-      `Valor da cota: R$ ${valorCota.toFixed(2)}\n\n` +
-      `Após pagar via Pix, envie o comprovante.`
+      `Valor: R$ ${valorCota.toFixed(2)}\n\n` +
+      `Chave Pix: SUA_CHAVE_PIX_AQUI\n\n` +
+      `Após pagar, envie o comprovante.`
+    );
+  }
+
+  // ====== MODO ADMIN ======
+
+  function admin() {
+    const senha = prompt("Senha do administrador:");
+
+    if (senha !== senhaAdmin) {
+      alert("Senha incorreta");
+      return;
+    }
+
+    const nomes = times.map((t, i) => `${i + 1} - ${t.nome}`).join("\n");
+
+    const escolha = prompt(
+      "CONFIRMAR PAGAMENTO\n\nEscolha o time:\n" + nomes
     );
 
-    if (confirmar) {
-      alert(
-        `PAGAMENTO VIA PIX\n\n` +
-        `Chave Pix: SUA_CHAVE_PIX_AQUI\n` +
-        `Valor: R$ ${valorCota.toFixed(2)}\n\n` +
-        `Após o pagamento, envie o comprovante pelo WhatsApp.`
-      );
+    const index = parseInt(escolha) - 1;
 
-      // aqui a cota AINDA NÃO é abatida automaticamente
-      // você fará isso manualmente depois
+    if (!times[index]) {
+      alert("Time inválido");
+      return;
+    }
+
+    if (times[index].cotas > 0) {
+      times[index].cotas--;
+      alert("Pagamento confirmado! Cota abatida.");
+      render();
+    } else {
+      alert("Cotas já esgotadas.");
     }
   }
+
+  // clique escondido: 5 toques no título
+  let cliques = 0;
+  document.querySelector("h1").onclick = () => {
+    cliques++;
+    if (cliques === 5) {
+      cliques = 0;
+      admin();
+    }
+  };
 
   render();
 </script>
 
 
 
+
 </body>
 </html>
+
 
 
 
