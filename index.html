@@ -1,128 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bolão de Pontos</title>
-<link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <title>Bolão de Futebol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: #fff;
-  text-align: center;
-  margin: 0;
-}
-.box {
-  background: #1e293b;
-  margin: 12px;
-  padding: 15px;
-  border-radius: 12px;
-}
-button {
-  width: 90%;
-  padding: 14px;
-  font-size: 16px;
-  margin: 6px 0;
-  border: none;
-  border-radius: 10px;
-  background: #22c55e;
-  font-weight: bold;
-}
-select, input {
-  width: 90%;
-  padding: 10px;
-  margin: 6px 0;
-  border-radius: 8px;
-  border: none;
-}
-.ranking {
-  text-align: left;
-}
-</style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #22c55e;
+    }
+
+    .info {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .times {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .time {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .time button {
+      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-<h2>⚽ Bolão de Pontos</h2>
+  <h1>⚽ Bolão Premiado</h1>
 
-<div class="box">
-  <input id="nome" placeholder="Seu nome">
-  <select id="time"></select>
-  <button onclick="entrar()">Entrar no Jogo</button>
-</div>
+  <div class="info">
+    <p>🎟 77 cotas por time</p>
+    <p>💰 Prêmio varia conforme o time</p>
+  </div>
 
-<div class="box">
-  <h3>🏆 Ranking</h3>
-  <div id="ranking" class="ranking"></div>
-</div>
+  <div class="times" id="listaTimes">
+    <!-- Os times vão aparecer aqui -->
+  </div>
 
-<script>
-const TIMES = [
-  "Flamengo","Palmeiras","Corinthians","São Paulo","Grêmio",
-  "Inter","Atlético-MG","Cruzeiro","Vasco","Botafogo",
-  "Fluminense","Bahia","Fortaleza","Athletico-PR","Cuiabá",
-  "Bragantino","Santos","Ceará","Sport","Vitória"
-];
+  <script>
+    const times = [
+      "Flamengo", "Palmeiras", "Corinthians", "São Paulo",
+      "Grêmio", "Internacional", "Atlético-MG", "Cruzeiro",
+      "Vasco", "Botafogo", "Fluminense", "Santos",
+      "Bahia", "Fortaleza", "Ceará", "Sport",
+      "Athletico-PR", "Coritiba", "Goiás", "Chapecoense"
+    ];
 
-let jogadores = [];
-let cotas = {};
-TIMES.forEach(t => cotas[t] = 77);
+    const lista = document.getElementById("listaTimes");
 
-const select = document.getElementById("time");
-TIMES.forEach(t => {
-  let opt = document.createElement("option");
-  opt.value = t;
-  opt.textContent = `${t} (${cotas[t]} cotas)`;
-  select.appendChild(opt);
-});
+    times.forEach(time => {
+      const div = document.createElement("div");
+      div.className = "time";
 
-function entrar() {
-  const nome = document.getElementById("nome").value;
-  const time = document.getElementById("time").value;
+      div.innerHTML = `
+        <h3>${time}</h3>
+        <p>77 cotas disponíveis</p>
+        <button>Comprar cota</button>
+      `;
 
-  if (!nome) {
-    alert("Digite seu nome");
-    return;
-  }
-
-  if (cotas[time] <= 0) {
-    alert("Cotas esgotadas para este time");
-    return;
-  }
-
-  cotas[time]--;
-  jogadores.push({ nome, time, pontos: 0 });
-  atualizarRanking();
-  alert("Participação registrada! Faça o PIX conforme instruções.");
-}
-
-function atualizarRanking() {
-  jogadores.sort((a,b) => b.pontos - a.pontos);
-  let html = "";
-  jogadores.forEach(j => {
-    html += `${j.nome} - ${j.time} - ${j.pontos} pts<br>`;
-  });
-  document.getElementById("ranking").innerHTML = html;
-}
-
-// FUNÇÃO ADMIN (VOCÊ)
-function pontuar(timeVencedor, pontos) {
-  jogadores.forEach(j => {
-    if (j.time === timeVencedor) {
-      j.pontos += pontos;
-    }
-  });
-  atualizarRanking();
-}
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
+      lista.appendChild(div);
+    });
+  </script>
 
 </body>
 </html>
