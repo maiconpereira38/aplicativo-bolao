@@ -66,9 +66,10 @@
 
    <script>
   const valorCota = 20;
-  const senhaAdmin = "1234"; // você pode mudar depois
+  const senhaAdmin = "1234";
+  const chaveStorage = "bolao-times";
 
-  const times = [
+  const timesPadrao = [
     { nome: "Flamengo", cotas: 77, premio: 5000 },
     { nome: "Palmeiras", cotas: 77, premio: 4800 },
     { nome: "Corinthians", cotas: 77, premio: 4600 },
@@ -91,7 +92,14 @@
     { nome: "Chapecoense", cotas: 77, premio: 3500 }
   ];
 
+  // 🔹 Carregar do localStorage ou usar padrão
+  let times = JSON.parse(localStorage.getItem(chaveStorage)) || timesPadrao;
+
   const lista = document.getElementById("listaTimes");
+
+  function salvar() {
+    localStorage.setItem(chaveStorage, JSON.stringify(times));
+  }
 
   function render() {
     lista.innerHTML = "";
@@ -125,12 +133,11 @@
       `Time: ${time.nome}\n` +
       `Valor: R$ ${valorCota.toFixed(2)}\n\n` +
       `Chave Pix: SUA_CHAVE_PIX_AQUI\n\n` +
-      `Após pagar, envie o comprovante.`
+      `Envie o comprovante após o pagamento.`
     );
   }
 
-  // ====== MODO ADMIN ======
-
+  // ===== ADMIN =====
   function admin() {
     const senha = prompt("Senha do administrador:");
 
@@ -140,11 +147,7 @@
     }
 
     const nomes = times.map((t, i) => `${i + 1} - ${t.nome}`).join("\n");
-
-    const escolha = prompt(
-      "CONFIRMAR PAGAMENTO\n\nEscolha o time:\n" + nomes
-    );
-
+    const escolha = prompt("Confirmar pagamento\n\nEscolha o time:\n" + nomes);
     const index = parseInt(escolha) - 1;
 
     if (!times[index]) {
@@ -154,14 +157,14 @@
 
     if (times[index].cotas > 0) {
       times[index].cotas--;
+      salvar();
       alert("Pagamento confirmado! Cota abatida.");
       render();
     } else {
-      alert("Cotas já esgotadas.");
+      alert("Cotas esgotadas.");
     }
   }
 
-  // clique escondido: 5 toques no título
   let cliques = 0;
   document.querySelector("h1").onclick = () => {
     cliques++;
@@ -177,8 +180,10 @@
 
 
 
+
 </body>
 </html>
+
 
 
 
