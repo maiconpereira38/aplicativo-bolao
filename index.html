@@ -66,26 +66,26 @@
 
    <script>
   const times = [
-    { nome: "Flamengo", cotas: 77 },
-    { nome: "Palmeiras", cotas: 77 },
-    { nome: "Corinthians", cotas: 77 },
-    { nome: "São Paulo", cotas: 77 },
-    { nome: "Grêmio", cotas: 77 },
-    { nome: "Internacional", cotas: 77 },
-    { nome: "Atlético-MG", cotas: 77 },
-    { nome: "Cruzeiro", cotas: 77 },
-    { nome: "Vasco", cotas: 77 },
-    { nome: "Botafogo", cotas: 77 },
-    { nome: "Fluminense", cotas: 77 },
-    { nome: "Santos", cotas: 77 },
-    { nome: "Bahia", cotas: 77 },
-    { nome: "Fortaleza", cotas: 77 },
-    { nome: "Ceará", cotas: 77 },
-    { nome: "Sport", cotas: 77 },
-    { nome: "Athletico-PR", cotas: 77 },
-    { nome: "Coritiba", cotas: 77 },
-    { nome: "Goiás", cotas: 77 },
-    { nome: "Chapecoense", cotas: 77 }
+    { nome: "Flamengo", cotas: 77, premio: 5000 },
+    { nome: "Palmeiras", cotas: 77, premio: 4800 },
+    { nome: "Corinthians", cotas: 77, premio: 4600 },
+    { nome: "São Paulo", cotas: 77, premio: 4500 },
+    { nome: "Grêmio", cotas: 77, premio: 4400 },
+    { nome: "Internacional", cotas: 77, premio: 4300 },
+    { nome: "Atlético-MG", cotas: 77, premio: 4700 },
+    { nome: "Cruzeiro", cotas: 77, premio: 4200 },
+    { nome: "Vasco", cotas: 77, premio: 4000 },
+    { nome: "Botafogo", cotas: 77, premio: 4100 },
+    { nome: "Fluminense", cotas: 77, premio: 4050 },
+    { nome: "Santos", cotas: 77, premio: 3950 },
+    { nome: "Bahia", cotas: 77, premio: 3900 },
+    { nome: "Fortaleza", cotas: 77, premio: 3850 },
+    { nome: "Ceará", cotas: 77, premio: 3800 },
+    { nome: "Sport", cotas: 77, premio: 3750 },
+    { nome: "Athletico-PR", cotas: 77, premio: 3700 },
+    { nome: "Coritiba", cotas: 77, premio: 3650 },
+    { nome: "Goiás", cotas: 77, premio: 3600 },
+    { nome: "Chapecoense", cotas: 77, premio: 3500 }
   ];
 
   const lista = document.getElementById("listaTimes");
@@ -102,6 +102,7 @@
       div.innerHTML = `
         <h3>${time.nome}</h3>
         <p>${time.cotas} cotas disponíveis</p>
+        <p><strong>Prêmio: R$ ${time.premio.toLocaleString("pt-BR")}</strong></p>
         <button ${botaoDesativado} onclick="comprar(${index})">
           ${time.cotas === 0 ? "Esgotado" : "Comprar cota"}
         </button>
@@ -119,9 +120,11 @@
   }
 
   render();
-  </script>
+</script>
+
 
 </body>
 </html>
+
 
 
