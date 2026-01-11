@@ -65,6 +65,8 @@
   </div>
 
    <script>
+  const valorCota = 20;
+
   const times = [
     { nome: "Flamengo", cotas: 77, premio: 5000 },
     { nome: "Palmeiras", cotas: 77, premio: 4800 },
@@ -97,25 +99,43 @@
       const div = document.createElement("div");
       div.className = "time";
 
-      const botaoDesativado = time.cotas === 0 ? "disabled" : "";
-
       div.innerHTML = `
         <h3>${time.nome}</h3>
         <p>${time.cotas} cotas disponíveis</p>
         <p><strong>Prêmio: R$ ${time.premio.toLocaleString("pt-BR")}</strong></p>
-        <button ${botaoDesativado} onclick="comprar(${index})">
-          ${time.cotas === 0 ? "Esgotado" : "Comprar cota"}
-        </button>
+        <p>Valor da cota: R$ ${valorCota.toFixed(2)}</p>
+        <button onclick="abrirCompra(${index})">Comprar cota</button>
       `;
 
       lista.appendChild(div);
     });
   }
 
-  function comprar(index) {
-    if (times[index].cotas > 0) {
-      times[index].cotas--;
-      render();
+  function abrirCompra(index) {
+    const time = times[index];
+
+    if (time.cotas === 0) {
+      alert("Cotas esgotadas para este time.");
+      return;
+    }
+
+    const confirmar = confirm(
+      `CONFIRMAR COMPRA\n\n` +
+      `Time: ${time.nome}\n` +
+      `Valor da cota: R$ ${valorCota.toFixed(2)}\n\n` +
+      `Após pagar via Pix, envie o comprovante.`
+    );
+
+    if (confirmar) {
+      alert(
+        `PAGAMENTO VIA PIX\n\n` +
+        `Chave Pix: SUA_CHAVE_PIX_AQUI\n` +
+        `Valor: R$ ${valorCota.toFixed(2)}\n\n` +
+        `Após o pagamento, envie o comprovante pelo WhatsApp.`
+      );
+
+      // aqui a cota AINDA NÃO é abatida automaticamente
+      // você fará isso manualmente depois
     }
   }
 
@@ -123,8 +143,10 @@
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
