@@ -65,63 +65,12 @@
   </div>
 
   <script>
-   <script>
-  const times = [
-    { nome: "Flamengo", cotas: 77 },
-    { nome: "Palmeiras", cotas: 77 },
-    { nome: "Corinthians", cotas: 77 },
-    { nome: "São Paulo", cotas: 77 },
-    { nome: "Grêmio", cotas: 77 },
-    { nome: "Internacional", cotas: 77 },
-    { nome: "Atlético-MG", cotas: 77 },
-    { nome: "Cruzeiro", cotas: 77 },
-    { nome: "Vasco", cotas: 77 },
-    { nome: "Botafogo", cotas: 77 },
-    { nome: "Fluminense", cotas: 77 },
-    { nome: "Santos", cotas: 77 },
-    { nome: "Bahia", cotas: 77 },
-    { nome: "Fortaleza", cotas: 77 },
-    { nome: "Ceará", cotas: 77 },
-    { nome: "Sport", cotas: 77 },
-    { nome: "Athletico-PR", cotas: 77 },
-    { nome: "Coritiba", cotas: 77 },
-    { nome: "Goiás", cotas: 77 },
-    { nome: "Chapecoense", cotas: 77 }
-  ];
-
-  const lista = document.getElementById("listaTimes");
-
-  function render() {
-    lista.innerHTML = "";
-
-    times.forEach((time, index) => {
-      const div = document.createElement("div");
-      div.className = "time";
-
-      const botaoDesativado = time.cotas === 0 ? "disabled" : "";
-
-      div.innerHTML = `
-        <h3>${time.nome}</h3>
-        <p>${time.cotas} cotas disponíveis</p>
-        <button ${botaoDesativado} onclick="comprar(${index})">
-          ${time.cotas === 0 ? "Esgotado" : "Comprar cota"}
-        </button>
-      `;
-
-      lista.appendChild(div);
-    });
-  }
-
-  function comprar(index) {
-    if (times[index].cotas > 0) {
-      times[index].cotas--;
-      render();
-    }
-  }
-
-  render();
-</script>
-
+    const times = [
+      "Flamengo", "Palmeiras", "Corinthians", "São Paulo",
+      "Grêmio", "Internacional", "Atlético-MG", "Cruzeiro",
+      "Vasco", "Botafogo", "Fluminense", "Santos",
+      "Bahia", "Fortaleza", "Ceará", "Sport",
+      "Athletico-PR", "Coritiba", "Goiás", "Chapecoense"
     ];
 
     const lista = document.getElementById("listaTimes");
@@ -142,4 +91,3 @@
 
 </body>
 </html>
-
