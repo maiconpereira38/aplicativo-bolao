@@ -139,17 +139,6 @@
   if (times[index].cotas > 0) {
     const time = times[index];
 
-    alert(
-      `TIME ESCOLHIDO: ${time.nome}\n` +
-      `VALOR DA COTA: R$ ${VALOR_COTA}\n\n` +
-      `Faça o Pix e envie o comprovante no Telegram.`
-    );
-
-    window.open(
-      `https://t.me/maiconpereira38?text=Comprei%20uma%20cota%20do%20time%20${encodeURIComponent(time.nome)}`
-    );
-  }
-
    const VALOR_COTA = 20;
     const time = times[index];
 
@@ -213,6 +202,7 @@
 
 </body>
 </html>
+
 
 
 
