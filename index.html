@@ -1,86 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Bolão de Futebol</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #22c55e;
-    }
-
-    .info {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .times {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-    }
-
-    .time {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .time button {
-      margin-top: 10px;
-      padding: 8px;
-      width: 100%;
-      border: none;
-      border-radius: 5px;
-      background: #22c55e;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }.contato {
-  text-align: center;
-  margin: 15px 0;
-}
-
-.contato a {
-  background: #229ED9;
-  color: black;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-  display: inline-block;
-}
-
-  </style>
-</head>
-
-<body>
-
-  <h1>⚽ Bolão Premiado</h1>
-
- <div class="contato">
-  <a href="https://t.me/maiconpereira38" target="_blank">
-    ✈️ Falar no Telegram para confirmar pagamento
-  </a>
-</div>
-
-
-  <div class="times" id="listaTimes">
-    <!-- Os times vão aparecer aqui -->
-  </div>
-
-   <script>
+<script>
   const valorCota = 20;
   const senhaAdmin = "1234";
   const chaveStorage = "bolao-times";
@@ -134,12 +52,9 @@
 
       lista.appendChild(div);
     });
+  }
 
-  function comprar(index) {
-  if (times[index].cotas > 0) {
-    const time = times[index];
-
-   const VALOR_COTA = 20;
+  function abrirCompra(index) {
     const time = times[index];
 
     if (time.cotas === 0) {
@@ -195,23 +110,3 @@
 
   render();
 </script>
-
-
-
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
