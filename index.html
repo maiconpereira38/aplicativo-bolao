@@ -2,136 +2,180 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Game de Pontos - Bolão VIP</title>
+  <title>Arena VIP - Gamificação</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary: #22c55e; /* Verde Sucesso */
+      --primary: #22c55e;
       --bg: #0f172a;
       --card: #1e293b;
-      --accent: #f59e0b; /* Laranja para Pontos */
+      --accent: #f59e0b;
+      --danger: #ef4444;
     }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; }
-    h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: var(--primary); margin-bottom: 5px; cursor: pointer; }
     .subtitle { text-align: center; color: #94a3b8; font-size: 0.9em; margin-bottom: 20px; }
     
     /* Painel de Usuário */
-    .user-stats { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 25px; border: 1px solid #334155; }
+    .user-stats { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 25px; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
     .stat-item { text-align: center; }
     .stat-value { display: block; font-size: 1.4em; font-weight: bold; color: var(--accent); }
-    .stat-label { font-size: 0.8em; color: #94a3b8; }
+    .stat-label { font-size: 0.8em; color: #94a3b8; text-transform: uppercase; }
 
     /* Grade de Times */
-    .times { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
-    .time { background: var(--card); padding: 20px; border-radius: 15px; text-align: center; transition: 0.3s; border: 1px solid #334155; }
-    .time:hover { transform: translateY(-5px); border-color: var(--primary); }
-    .time h3 { margin: 0 0 10px 0; color: #f8fafc; }
+    .times { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .time { background: var(--card); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #334155; }
     .multiplier { background: rgba(34, 197, 94, 0.1); color: var(--primary); padding: 4px 8px; border-radius: 5px; font-size: 0.8em; font-weight: bold; }
-    
     .buy-btn { margin-top: 15px; padding: 10px; width: 100%; border: none; border-radius: 8px; background: var(--primary); color: #000; font-weight: bold; cursor: pointer; }
-    
-    /* Loja de Prêmios */
-    .shop { margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 15px; }
-    .shop h2 { color: var(--accent); text-align: center; }
-    .reward-list { display: flex; flex-direction: column; gap: 10px; }
-    .reward-item { display: flex; justify-content: space-between; background: var(--card); padding: 10px 15px; border-radius: 8px; font-size: 0.9em; }
+
+    /* Tabela de Histórico */
+    .history-section { background: var(--card); border-radius: 15px; padding: 15px; margin-top: 20px; border: 1px solid #334155; }
+    .history-section h2 { font-size: 1.1em; color: var(--accent); margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+    th { text-align: left; color: #94a3b8; padding: 8px; }
+    td { padding: 10px 8px; border-bottom: 1px solid #334155; }
+    .win { color: var(--primary); font-weight: bold; }
+    .loss { color: var(--danger); }
+
+    /* Loja Rapida */
+    .shop-preview { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+    .shop-item { min-width: 120px; background: #1e293b; padding: 10px; border-radius: 10px; text-align: center; border: 1px dashed #475569; }
+    .shop-item span { display: block; font-size: 0.7em; color: #94a3b8; }
   </style>
 </head>
 <body>
 
-  <h1>⚽ Arena de Pontos</h1>
-  <p class="subtitle">Transforme palpites em prêmios reais</p>
+  <h1 id="titleApp">⚽ Arena de Pontos</h1>
+  <p class="subtitle">O bolão oficial da galera</p>
 
   <div class="user-stats">
     <div class="stat-item">
-      <span class="stat-label">Meus Pontos</span>
+      <span class="stat-label">Saldo Atual</span>
       <span class="stat-value" id="saldoPontos">0</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">Ranking</span>
-      <span class="stat-value">#--</span>
+      <span class="stat-label">Acertos</span>
+      <span class="stat-value" id="countWins">0</span>
     </div>
+  </div>
+
+  <div class="shop-preview">
+    <div class="shop-item"><span>Grupo VIP</span><strong>5k pts</strong></div>
+    <div class="shop-item"><span>Camisa</span><strong>40k pts</strong></div>
+    <div class="shop-item"><span>PIX R$100</span><strong>25k pts</strong></div>
   </div>
 
   <div class="times" id="listaTimes"></div>
 
-  <div class="shop">
-    <h2>🎁 Troque seus Pontos</h2>
-    <div class="reward-list">
-      <div class="reward-item"><span>Acesso Grupo VIP</span> <strong>5.000 pts</strong></div>
-      <div class="reward-item"><span>Camisa Oficial</span> <strong>40.000 pts</strong></div>
-      <div class="reward-item"><span>Pix de R$ 500,00</span> <strong>100.000 pts</strong></div>
-    </div>
+  <div class="history-section">
+    <h2>📜 Histórico de Rodadas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Evento</th>
+          <th>Resultado</th>
+          <th>Pontos</th>
+        </tr>
+      </thead>
+      <tbody id="historicoCorpo">
+        </tbody>
+    </table>
   </div>
 
 <script>
   const valorCotaR$ = 20;
-  const pontosPorCota = 1000; // Cada R$ 20 viram 1000 pontos
+  const pontosPorCota = 1000;
   const senhaAdmin = "1234";
 
-  // Times com Multiplicadores (Lógica de Jogo)
   const times = [
-    { nome: "Real Madrid", mult: 1.5, cotas: 77 },
-    { nome: "Flamengo", mult: 1.8, cotas: 77 },
-    { nome: "Palmeiras", mult: 1.8, cotas: 77 },
-    { nome: "Manchester City", mult: 1.4, cotas: 77 },
-    { nome: "Zebra do Dia", mult: 5.0, cotas: 20 }
+    { nome: "Real Madrid", mult: 1.5 },
+    { nome: "Flamengo", mult: 1.8 },
+    { nome: "Palmeiras", mult: 1.8 },
+    { nome: "Zebra", mult: 4.5 }
   ];
 
+  // Carregar dados salvos
   let meuSaldo = parseInt(localStorage.getItem("meu-saldo-pontos")) || 0;
+  let meuHistorico = JSON.parse(localStorage.getItem("meu-historico")) || [];
 
   function render() {
     document.getElementById("saldoPontos").innerText = meuSaldo.toLocaleString();
+    
+    // Contar vitórias no histórico
+    const wins = meuHistorico.filter(h => h.pontos > 0).length;
+    document.getElementById("countWins").innerText = wins;
+
+    // Renderizar Times
     const lista = document.getElementById("listaTimes");
     lista.innerHTML = "";
-
     times.forEach((time, index) => {
       const div = document.createElement("div");
       div.className = "time";
       div.innerHTML = `
         <h3>${time.nome}</h3>
-        <span class="multiplier">Multiplica: x${time.mult.toFixed(1)}</span>
-        <p style="font-size: 0.8em; margin: 10px 0;">Disponível: ${time.cotas}</p>
-        <button class="buy-btn" onclick="solicitarCota(${index})">Comprar 1.000 pts</button>
+        <span class="multiplier">ODDS x${time.mult.toFixed(1)}</span>
+        <button class="buy-btn" onclick="solicitarCota(${index})">Comprar Cota</button>
       `;
       lista.appendChild(div);
     });
+
+    // Renderizar Histórico
+    const corpo = document.getElementById("historicoCorpo");
+    corpo.innerHTML = "";
+    meuHistorico.reverse().slice(0, 10).forEach(item => { // Mostra os últimos 10
+      const row = `<tr>
+        <td>${item.descricao}</td>
+        <td>${item.resultado}</td>
+        <td class="${item.pontos >= 0 ? 'win' : 'loss'}">${item.pontos >= 0 ? '+' : ''}${item.pontos}</td>
+      </tr>`;
+      corpo.innerHTML += row;
+    });
+    meuHistorico.reverse(); // Desinverte para manter a ordem lógica no Storage
   }
 
   function solicitarCota(index) {
-    const time = times[index];
-    alert(
-      `🎮 MODO JOGO ATIVADO\n\n` +
-      `Para entrar no time ${time.nome}:\n` +
-      `1. Pague R$ ${valorCotaR$.toFixed(2)} via PIX\n` +
-      `2. Você recebe ${pontosPorCota} pontos.\n` +
-      `3. Se o time vencer, seus pontos viram ${(pontosPorCota * time.mult).toFixed(0)}!\n\n` +
-      `Chave: SEU_PIX_AQUI`
-    );
+    alert(`PIX PARA ADQUIRIR COTA:\n\nTime: ${times[index].nome}\nValor: R$ ${valorCotaR$}\nRecebe: 1.000 pts\n\nChave: SEU_PIX_AQUI\n\nEnvie o print no Whats!`);
   }
 
-  // Lógica Administrativa (Onde você credita os pontos após o jogo)
+  // FUNÇÕES DO SÓCIO (ADMIN)
   function adminControl() {
-    const acao = prompt("1 - Confirmar Compra (Creditar 1000 pts)\n2 - Finalizar Jogo (Multiplicar Pontos)");
+    const acao = prompt("1 - Confirmar Pagamento (+1000 pts)\n2 - Lançar Resultado (Multiplicar)");
     
     if(acao === "1") {
         meuSaldo += 1000;
-        localStorage.setItem("meu-saldo-pontos", meuSaldo);
-        alert("Pontos creditados com sucesso!");
+        meuHistorico.push({ descricao: "Compra de Cota", resultado: "Confirmado", pontos: 1000 });
+        salvarEDeslogar();
     } else if (acao === "2") {
-        const m = prompt("Digite o multiplicador do resultado (ex: 1.5):");
-        meuSaldo = Math.floor(meuSaldo * parseFloat(m));
-        localStorage.setItem("meu-saldo-pontos", meuSaldo);
-        alert("Rodada finalizada! Saldo atualizado.");
+        const desc = prompt("Nome do Time/Evento:");
+        const m = prompt("Multiplicador Ganho (ex: 1.8) ou 0 se perdeu:");
+        const mult = parseFloat(m);
+        
+        let pontosGanhos;
+        if(mult > 0) {
+            pontosGanhos = Math.floor(1000 * mult); // Exemplo baseado em 1 cota
+            meuSaldo += pontosGanhos;
+            meuHistorico.push({ descricao: desc, resultado: "VITORIA", pontos: pontosGanhos });
+        } else {
+            meuHistorico.push({ descricao: desc, resultado: "DERROTA", pontos: 0 });
+        }
+        salvarEDeslogar();
     }
+  }
+
+  function salvarEDeslogar() {
+    localStorage.setItem("meu-saldo-pontos", meuSaldo);
+    localStorage.setItem("meu-historico", JSON.stringify(meuHistorico));
+    alert("Dados atualizados!");
     render();
   }
 
-  // Atalho Admin: Clique 5 vezes no título
   let clicks = 0;
-  document.querySelector("h1").onclick = () => {
+  document.getElementById("titleApp").onclick = () => {
     clicks++;
-    if(clicks === 5) { clicks = 0; if(prompt("Senha:") === senhaAdmin) adminControl(); }
+    if(clicks === 5) { 
+        clicks = 0; 
+        if(prompt("Senha do Sócio:") === senhaAdmin) adminControl(); 
+    }
   };
 
   render();
