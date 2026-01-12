@@ -1,112 +1,93 @@
-<script>
-  const valorCota = 20;
-  const senhaAdmin = "1234";
-  const chaveStorage = "bolao-times";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Bolão de Futebol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const timesPadrao = [
-    { nome: "Flamengo", cotas: 77, premio: 5000 },
-    { nome: "Palmeiras", cotas: 77, premio: 4800 },
-    { nome: "Corinthians", cotas: 77, premio: 4600 },
-    { nome: "São Paulo", cotas: 77, premio: 4500 },
-    { nome: "Grêmio", cotas: 77, premio: 4400 },
-    { nome: "Internacional", cotas: 77, premio: 4300 },
-    { nome: "Atlético-MG", cotas: 77, premio: 4700 },
-    { nome: "Cruzeiro", cotas: 77, premio: 4200 },
-    { nome: "Vasco", cotas: 77, premio: 4000 },
-    { nome: "Botafogo", cotas: 77, premio: 4100 },
-    { nome: "Fluminense", cotas: 77, premio: 4050 },
-    { nome: "Santos", cotas: 77, premio: 3950 },
-    { nome: "Bahia", cotas: 77, premio: 3900 },
-    { nome: "Fortaleza", cotas: 77, premio: 3850 },
-    { nome: "Ceará", cotas: 77, premio: 3800 },
-    { nome: "Sport", cotas: 77, premio: 3750 },
-    { nome: "Athletico-PR", cotas: 77, premio: 3700 },
-    { nome: "Coritiba", cotas: 77, premio: 3650 },
-    { nome: "Goiás", cotas: 77, premio: 3600 },
-    { nome: "Chapecoense", cotas: 77, premio: 3500 }
-  ];
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
 
-  // 🔹 Carregar do localStorage ou usar padrão
-  let times = JSON.parse(localStorage.getItem(chaveStorage)) || timesPadrao;
+    h1 {
+      text-align: center;
+      color: #22c55e;
+    }
 
-  const lista = document.getElementById("listaTimes");
+    .info {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-  function salvar() {
-    localStorage.setItem(chaveStorage, JSON.stringify(times));
-  }
+    .times {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
 
-  function render() {
-    lista.innerHTML = "";
+    .time {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
 
-    times.forEach((time, index) => {
+    .time button {
+      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>⚽ Bolão Premiado</h1>
+
+  <div class="info">
+    <p>🎟 77 cotas por time</p>
+    <p>💰 Prêmio varia conforme o time</p>
+  </div>
+
+  <div class="times" id="listaTimes">
+    <!-- Os times vão aparecer aqui -->
+  </div>
+
+  <script>
+    const times = [
+      "Flamengo", "Palmeiras", "Corinthians", "São Paulo",
+      "Grêmio", "Internacional", "Atlético-MG", "Cruzeiro",
+      "Vasco", "Botafogo", "Fluminense", "Santos",
+      "Bahia", "Fortaleza", "Ceará", "Sport",
+      "Athletico-PR", "Coritiba", "Goiás", "Chapecoense"
+    ];
+
+    const lista = document.getElementById("listaTimes");
+
+    times.forEach(time => {
       const div = document.createElement("div");
       div.className = "time";
 
       div.innerHTML = `
-        <h3>${time.nome}</h3>
-        <p>${time.cotas} cotas disponíveis</p>
-        <p><strong>Prêmio: R$ ${time.premio.toLocaleString("pt-BR")}</strong></p>
-        <p>Valor da cota: R$ ${valorCota.toFixed(2)}</p>
-        <button onclick="abrirCompra(${index})">Comprar cota</button>
+        <h3>${time}</h3>
+        <p>77 cotas disponíveis</p>
+        <button>Comprar cota</button>
       `;
 
       lista.appendChild(div);
     });
-  }
+  </script>
 
-  function abrirCompra(index) {
-    const time = times[index];
-
-    if (time.cotas === 0) {
-      alert("Cotas esgotadas.");
-      return;
-    }
-
-    alert(
-      `PAGAMENTO VIA PIX\n\n` +
-      `Time: ${time.nome}\n` +
-      `Valor: R$ ${valorCota.toFixed(2)}\n\n` +
-      `Chave Pix: SUA_CHAVE_PIX_AQUI\n\n` +
-      `Envie o comprovante após o pagamento.`
-    );
-  }
-
-  // ===== ADMIN =====
-  function admin() {
-    const senha = prompt("Senha do administrador:");
-
-    if (senha !== senhaAdmin) {
-      alert("Senha incorreta");
-      return;
-    }
-
-    const nomes = times.map((t, i) => `${i + 1} - ${t.nome}`).join("\n");
-    const escolha = prompt("Confirmar pagamento\n\nEscolha o time:\n" + nomes);
-    const index = parseInt(escolha) - 1;
-
-    if (!times[index]) {
-      alert("Time inválido");
-      return;
-    }
-
-    if (times[index].cotas > 0) {
-      times[index].cotas--;
-      salvar();
-      alert("Pagamento confirmado! Cota abatida.");
-      render();
-    } else {
-      alert("Cotas esgotadas.");
-    }
-  }
-
-  let cliques = 0;
-  document.querySelector("h1").onclick = () => {
-    cliques++;
-    if (cliques === 5) {
-      cliques = 0;
-      admin();
-    }
-  };
-
-  render();
-</script>
+</body>
+</html>
