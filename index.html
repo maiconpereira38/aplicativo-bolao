@@ -2,188 +2,173 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Bolão Premiado</title>
-
+  <title>Bolão Premiado - Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      margin: 0;
-      padding: 10px; /* Reduzi o padding lateral */
+    :root {
+      --primary: #22c55e;
+      --bg: #0f172a;
+      --card: #020617;
+      --text: #e5e7eb;
+      --gold: #f59e0b;
     }
+    body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+    
+    /* TELAS */
+    #telaCadastro, #telaRegulamento, #telaJogo { display: none; }
 
-    h1 {
-      text-align: center;
-      font-size: 1.2em;
-      margin: 10px 0;
-    }
+    /* FORMULÁRIOS */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.8em; margin-bottom: 4px; color: #94a3b8; }
+    input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #1e293b; background: #1e293b; color: white; box-sizing: border-box; }
 
-    .contato {
-      text-align: center;
-      margin: 10px 0;
-    }
+    /* BOTÕES */
+    .btn-principal { background: var(--primary); color: black; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .btn-voltar { background: #475569; color: white; margin-top: 10px; }
 
-    .contato a {
-      background: #229ED9;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 11px;
-    }
+    /* GRADE DE 4 COLUNAS */
+    .lista { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 15px; }
+    .time { background: var(--card); border: 1px solid #1e293b; padding: 6px 2px; border-radius: 6px; text-align: center; }
+    .time h3 { margin: 0; font-size: 0.65em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .time p { margin: 2px 0; font-size: 0.55em; color: #94a3b8; }
+    .time p strong { color: var(--gold); }
+    .time button { background: var(--primary); border: none; padding: 5px; width: 90%; border-radius: 4px; font-weight: bold; font-size: 0.65em; cursor: pointer; margin-top: 4px; }
 
-    /* LISTA COM 6 COLUNAS */
-    .lista {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr); 
-      gap: 5px; /* Espaço bem pequeno entre eles */
-      margin-top: 15px;
-    }
-
-    .time {
-      background: #020617;
-      border: 1px solid #1e293b;
-      padding: 5px 2px;
-      border-radius: 5px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-width: 0; /* Evita quebra de layout */
-    }
-
-    .time h3 {
-      margin: 0;
-      font-size: 0.55em; /* Fonte pequena para caber o nome */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .time p {
-      margin: 2px 0;
-      font-size: 0.5em; /* Fonte bem pequena */
-      color: #94a3b8;
-      line-height: 1.1;
-    }
-
-    .time p strong {
-      color: #f59e0b;
-      display: block; /* Prêmio em uma linha nova */
-    }
-
-    .time button {
-      background: #22c55e;
-      border: none;
-      padding: 4px 0;
-      width: 100%;
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 0.55em;
-      cursor: pointer;
-      margin-top: 3px;
-    }
-
-    .time button:disabled {
-      background: #475569;
-      cursor: not-allowed;
-    }
-
-    footer {
-      margin-top: 30px;
-      font-size: 9px;
-      text-align: center;
-      color: #94a3b8;
-    }
+    /* REGULAMENTO */
+    .reg-box { background: var(--card); padding: 15px; border-radius: 10px; font-size: 0.85em; line-height: 1.4; border: 1px solid #1e293b; }
+    
+    header { text-align: center; margin-bottom: 15px; }
+    header h1 { font-size: 1.3em; color: var(--primary); cursor: pointer; }
+    .contato { text-align: center; margin-bottom: 10px; }
+    .contato a { background: #229ED9; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; }
   </style>
 </head>
-
 <body>
 
-  <h1>⚽ Bolão Premiado</h1>
-
-  <div class="contato">
-    <a href="https://t.me/SEU_USUARIO" target="_blank">
-      ✈️ Confirmar Pagamento
-    </a>
+  <div id="telaCadastro">
+    <header><h1>CADASTRO ARENA</h1></header>
+    <div class="form-group"><label>Nome</label><input type="text" id="regNome"></div>
+    <div class="form-group"><label>Telefone</label><input type="tel" id="regTel"></div>
+    <div class="form-group"><label>País</label><select id="regPais"><option>Brasil</option><option>Portugal</option><option>Outros</option></select></div>
+    <div class="form-group"><label>E-mail</label><input type="email" id="regEmail"></div>
+    <button class="btn-principal" onclick="salvarCadastro()">CRIAR CONTA</button>
   </div>
 
-  <div class="lista" id="listaTimes"></div>
+  <div id="telaRegulamento">
+    <header><h1>REGULAMENTO</h1></header>
+    <div class="reg-box">
+      <p>1. O Bolão tem duração de <strong>30 dias</strong> (Temporada Mensal).</p>
+      <p>2. Cada cota custa <strong>R$ 20,00</strong>.</p>
+      <p>3. Ao comprar uma cota, você acumula pontos baseados no multiplicador do time.</p>
+      <p>4. Ao final dos 30 dias, os maiores pontuadores do ranking dividem a premiação.</p>
+      <p>5. O pagamento é via PIX com confirmação manual via Telegram.</p>
+    </div>
+    <button class="btn-principal" style="margin-top:15px" onclick="irParaJogo()">CONCORDO E QUERO JOGAR</button>
+  </div>
 
-  <footer>
-    ⚠️ Iniciativa independente. Pagamento via Pix com confirmação manual.
-  </footer>
+  <div id="telaJogo">
+    <header><h1 onclick="modoAdmin()">⚽ BOLÃO PREMIADO</h1></header>
+    <div class="contato">
+      <a href="https://t.me/SEU_USUARIO" target="_blank">✈️ Confirmar Pagamento</a>
+    </div>
+    <div style="text-align:center; font-size: 0.8em; margin-bottom: 10px;">
+      Olá, <span id="nomeUser" style="color:var(--primary)"></span>!
+    </div>
+    <div class="lista" id="listaTimes"></div>
+    <footer style="text-align:center; font-size:9px; color:#94a3b8; margin-top:20px;">
+      Ranking reseta a cada 30 dias. Confirmar comprovantes no suporte.
+    </footer>
+  </div>
 
-  <script>
-    const VALOR_COTA = 20;
+<script>
+  // BANCO DE DADOS DE TIMES (30 TIMES)
+  let times = [
+    { nome: "Time 01", cotas: 77, premio: 5000 }, { nome: "Time 02", cotas: 77, premio: 4800 },
+    { nome: "Time 03", cotas: 77, premio: 4600 }, { nome: "Time 04", cotas: 77, premio: 4500 },
+    { nome: "Time 05", cotas: 77, premio: 4400 }, { nome: "Time 06", cotas: 77, premio: 4300 },
+    { nome: "Time 07", cotas: 77, premio: 4700 }, { nome: "Time 08", cotas: 77, premio: 4200 },
+    { nome: "Time 09", cotas: 77, premio: 4000 }, { nome: "Time 10", cotas: 77, premio: 4100 },
+    { nome: "Time 11", cotas: 77, premio: 4050 }, { nome: "Time 12", cotas: 77, premio: 3950 },
+    { nome: "Time 13", cotas: 77, premio: 3900 }, { nome: "Time 14", cotas: 77, premio: 3850 },
+    { nome: "Time 15", cotas: 77, premio: 3800 }, { nome: "Time 16", cotas: 77, premio: 3750 },
+    { nome: "Time 17", cotas: 77, premio: 3700 }, { nome: "Time 18", cotas: 77, premio: 3650 },
+    { nome: "Time 19", cotas: 77, premio: 3600 }, { nome: "Time 20", cotas: 77, premio: 3500 },
+    { nome: "Time 21", cotas: 77, premio: 3000 }, { nome: "Time 22", cotas: 77, premio: 3000 },
+    { nome: "Time 23", cotas: 77, premio: 3000 }, { nome: "Time 24", cotas: 77, premio: 3000 },
+    { nome: "Time 25", cotas: 77, premio: 3000 }, { nome: "Time 26", cotas: 77, premio: 3000 },
+    { nome: "Time 27", cotas: 77, premio: 3000 }, { nome: "Time 28", cotas: 77, premio: 3000 },
+    { nome: "Time 29", cotas: 77, premio: 3000 }, { nome: "Time 30", cotas: 77, premio: 3000 }
+  ];
 
-    // LISTA COM 30 TIMES
-    const times = [
-      { nome: "Time 01", cotas: 77, premio: 5000 },
-      { nome: "Time 02", cotas: 77, premio: 4800 },
-      { nome: "Time 03", cotas: 77, premio: 4600 },
-      { nome: "Time 04", cotas: 77, premio: 4500 },
-      { nome: "Time 05", cotas: 77, premio: 4400 },
-      { nome: "Time 06", cotas: 77, premio: 4300 },
-      { nome: "Time 07", cotas: 77, premio: 4700 },
-      { nome: "Time 08", cotas: 77, premio: 4200 },
-      { nome: "Time 09", cotas: 77, premio: 4000 },
-      { nome: "Time 10", cotas: 77, premio: 4100 },
-      { nome: "Time 11", cotas: 77, premio: 4050 },
-      { nome: "Time 12", cotas: 77, premio: 3950 },
-      { nome: "Time 13", cotas: 77, premio: 3900 },
-      { nome: "Time 14", cotas: 77, premio: 3850 },
-      { nome: "Time 15", cotas: 77, premio: 3800 },
-      { nome: "Time 16", cotas: 77, premio: 3750 },
-      { nome: "Time 17", cotas: 77, premio: 3700 },
-      { nome: "Time 18", cotas: 77, premio: 3650 },
-      { nome: "Time 19", cotas: 77, premio: 3600 },
-      { nome: "Time 20", cotas: 77, premio: 3500 },
-      { nome: "Time 21", cotas: 77, premio: 3000 },
-      { nome: "Time 22", cotas: 77, premio: 3000 },
-      { nome: "Time 23", cotas: 77, premio: 3000 },
-      { nome: "Time 24", cotas: 77, premio: 3000 },
-      { nome: "Time 25", cotas: 77, premio: 3000 },
-      { nome: "Time 26", cotas: 77, premio: 3000 },
-      { nome: "Time 27", cotas: 77, premio: 3000 },
-      { nome: "Time 28", cotas: 77, premio: 3000 },
-      { nome: "Time 29", cotas: 77, premio: 3000 },
-      { nome: "Time 30", cotas: 77, premio: 3000 }
-    ];
+  // Carregar dados salvos do Administrador (Cotas)
+  const backupCotas = localStorage.getItem("banco_cotas");
+  if(backupCotas) {
+    const cotasSalvas = JSON.parse(backupCotas);
+    times.forEach((t, i) => t.cotas = cotasSalvas[i]);
+  }
 
-    const lista = document.getElementById("listaTimes");
+  // LÓGICA DE TELAS
+  const user = localStorage.getItem("user_bolao");
+  if(!user) {
+    document.getElementById("telaCadastro").style.display = "block";
+  } else {
+    irParaJogo();
+  }
 
-    function render() {
-      lista.innerHTML = "";
+  function salvarCadastro() {
+    const nome = document.getElementById("regNome").value;
+    if(!nome) return alert("Digite seu nome!");
+    localStorage.setItem("user_bolao", nome);
+    document.getElementById("telaCadastro").style.display = "none";
+    document.getElementById("telaRegulamento").style.display = "block";
+  }
 
-      times.forEach((time, index) => {
-        const div = document.createElement("div");
-        div.className = "time";
-
-        div.innerHTML = `
-          <h3>${time.nome}</h3>
-          <p>C:${time.cotas}</p>
-          <p><strong>R$${time.premio}</strong></p>
-          <button ${time.cotas === 0 ? "disabled" : ""} onclick="comprar(${index})">
-            ${time.cotas === 0 ? "X" : "OK"}
-          </button>
-        `;
-
-        lista.appendChild(div);
-      });
-    }
-
-    function comprar(index) {
-      const time = times[index];
-      alert(`TIME: ${time.nome}\nVALOR: R$ ${VALOR_COTA}`);
-      window.open(`https://t.me/SEU_USUARIO?text=Comprei%20${encodeURIComponent(time.nome)}`);
-    }
-
+  function irParaJogo() {
+    document.getElementById("telaCadastro").style.display = "none";
+    document.getElementById("telaRegulamento").style.display = "none";
+    document.getElementById("telaJogo").style.display = "block";
+    document.getElementById("nomeUser").innerText = localStorage.getItem("user_bolao");
     render();
-  </script>
+  }
 
+  function render() {
+    const lista = document.getElementById("listaTimes");
+    lista.innerHTML = "";
+    times.forEach((time, index) => {
+      lista.innerHTML += `
+        <div class="time">
+          <h3>${time.nome}</h3>
+          <p>Cotas: ${time.cotas}</p>
+          <p><strong>R$${time.premio}</strong></p>
+          <button onclick="comprar(${index})">JOGAR</button>
+        </div>
+      `;
+    });
+  }
+
+  function comprar(index) {
+    const t = times[index];
+    alert(`TIME: ${t.nome}\nValor: R$ 20,00\nConfirme no Telegram!`);
+    window.open(`https://t.me/SEU_USUARIO?text=Olá, quero cota do ${t.nome}`);
+  }
+
+  // MODO ADMINISTRADOR PARA ALTERAR COTAS
+  function modoAdmin() {
+    let senha = prompt("Senha Admin:");
+    if(senha === "1234") {
+      let idx = prompt("Digite o número do Time (1 a 30):");
+      let novoValor = prompt("Novo número de cotas:");
+      if(idx && novoValor) {
+        times[parseInt(idx)-1].cotas = parseInt(novoValor);
+        // Salvar permanentemente as cotas alteradas
+        const apenasCotas = times.map(t => t.cotas);
+        localStorage.setItem("banco_cotas", JSON.stringify(apenasCotas));
+        render();
+      }
+    }
+  }
+
+  render();
+</script>
 </body>
 </html>
