@@ -10,52 +10,77 @@
       background: #0f172a;
       color: #e5e7eb;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
     }
 
     h1 {
       text-align: center;
+      font-size: 1.5em;
     }
 
     .contato {
       text-align: center;
-      margin: 15px 0;
+      margin: 10px 0;
     }
 
     .contato a {
       background: #229ED9;
-      color: black;
-      padding: 12px 18px;
+      color: white;
+      padding: 10px 15px;
       border-radius: 8px;
       font-weight: bold;
       text-decoration: none;
       display: inline-block;
+      font-size: 13px;
     }
 
+    /* LISTA AJUSTADA PARA QUADRADOS PEQUENOS (3 colunas) */
     .lista {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 8px;
       margin-top: 20px;
     }
 
     .time {
       background: #020617;
       border: 1px solid #1e293b;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 8px 4px;
+      border-radius: 8px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .time h3 {
+      margin: 0;
+      font-size: 0.75em; /* Nome do time menor */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .time p {
+      margin: 4px 0;
+      font-size: 0.65em; /* Texto de cotas e prêmio menor */
+      color: #94a3b8;
+    }
+
+    .time p strong {
+      color: #f59e0b; /* Prêmio em destaque (ouro) */
     }
 
     .time button {
       background: #22c55e;
       border: none;
-      padding: 10px;
+      padding: 6px;
       width: 100%;
-      border-radius: 6px;
+      border-radius: 4px;
       font-weight: bold;
+      font-size: 0.7em;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 5px;
     }
 
     .time button:disabled {
@@ -64,8 +89,8 @@
     }
 
     footer {
-      margin-top: 40px;
-      font-size: 12px;
+      margin-top: 30px;
+      font-size: 10px;
       text-align: center;
       color: #94a3b8;
     }
@@ -78,7 +103,7 @@
 
   <div class="contato">
     <a href="https://t.me/SEU_USUARIO" target="_blank">
-      ✈️ Falar no Telegram para confirmar pagamento
+      ✈️ Confirmar Pagamento
     </a>
   </div>
 
@@ -91,27 +116,38 @@
   <script>
     const VALOR_COTA = 20;
 
+    // LISTA COM 30 TIMES PARA VOCÊ ALTERAR OS NOMES E PREMIOS
     const times = [
-      { nome: "Flamengo", cotas: 77, premio: 5000 },
-      { nome: "Palmeiras", cotas: 77, premio: 4800 },
-      { nome: "Corinthians", cotas: 77, premio: 4600 },
-      { nome: "São Paulo", cotas: 77, premio: 4500 },
-      { nome: "Grêmio", cotas: 77, premio: 4400 },
-      { nome: "Internacional", cotas: 77, premio: 4300 },
-      { nome: "Atlético-MG", cotas: 77, premio: 4700 },
-      { nome: "Cruzeiro", cotas: 77, premio: 4200 },
-      { nome: "Vasco", cotas: 77, premio: 4000 },
-      { nome: "Botafogo", cotas: 77, premio: 4100 },
-      { nome: "Fluminense", cotas: 77, premio: 4050 },
-      { nome: "Santos", cotas: 77, premio: 3950 },
-      { nome: "Bahia", cotas: 77, premio: 3900 },
-      { nome: "Fortaleza", cotas: 77, premio: 3850 },
-      { nome: "Ceará", cotas: 77, premio: 3800 },
-      { nome: "Sport", cotas: 77, premio: 3750 },
-      { nome: "Athletico-PR", cotas: 77, premio: 3700 },
-      { nome: "Coritiba", cotas: 77, premio: 3650 },
-      { nome: "Goiás", cotas: 77, premio: 3600 },
-      { nome: "Chapecoense", cotas: 77, premio: 3500 }
+      { nome: "Time 01", cotas: 77, premio: 5000 },
+      { nome: "Time 02", cotas: 77, premio: 4800 },
+      { nome: "Time 03", cotas: 77, premio: 4600 },
+      { nome: "Time 04", cotas: 77, premio: 4500 },
+      { nome: "Time 05", cotas: 77, premio: 4400 },
+      { nome: "Time 06", cotas: 77, premio: 4300 },
+      { nome: "Time 07", cotas: 77, premio: 4700 },
+      { nome: "Time 08", cotas: 77, premio: 4200 },
+      { nome: "Time 09", cotas: 77, premio: 4000 },
+      { nome: "Time 10", cotas: 77, premio: 4100 },
+      { nome: "Time 11", cotas: 77, premio: 4050 },
+      { nome: "Time 12", cotas: 77, premio: 3950 },
+      { nome: "Time 13", cotas: 77, premio: 3900 },
+      { nome: "Time 14", cotas: 77, premio: 3850 },
+      { nome: "Time 15", cotas: 77, premio: 3800 },
+      { nome: "Time 16", cotas: 77, premio: 3750 },
+      { nome: "Time 17", cotas: 77, premio: 3700 },
+      { nome: "Time 18", cotas: 77, premio: 3650 },
+      { nome: "Time 19", cotas: 77, premio: 3600 },
+      { nome: "Time 20", cotas: 77, premio: 3500 },
+      { nome: "Time 21", cotas: 77, premio: 3000 },
+      { nome: "Time 22", cotas: 77, premio: 3000 },
+      { nome: "Time 23", cotas: 77, premio: 3000 },
+      { nome: "Time 24", cotas: 77, premio: 3000 },
+      { nome: "Time 25", cotas: 77, premio: 3000 },
+      { nome: "Time 26", cotas: 77, premio: 3000 },
+      { nome: "Time 27", cotas: 77, premio: 3000 },
+      { nome: "Time 28", cotas: 77, premio: 3000 },
+      { nome: "Time 29", cotas: 77, premio: 3000 },
+      { nome: "Time 30", cotas: 77, premio: 3000 }
     ];
 
     const lista = document.getElementById("listaTimes");
@@ -125,10 +161,10 @@
 
         div.innerHTML = `
           <h3>${time.nome}</h3>
-          <p>${time.cotas} cotas disponíveis</p>
-          <p><strong>Prêmio: R$ ${time.premio.toLocaleString("pt-BR")}</strong></p>
+          <p>Cotas: ${time.cotas}</p>
+          <p><strong>R$ ${time.premio}</strong></p>
           <button ${time.cotas === 0 ? "disabled" : ""} onclick="comprar(${index})">
-            ${time.cotas === 0 ? "Esgotado" : "Comprar cota"}
+            ${time.cotas === 0 ? "X" : "Jogar"}
           </button>
         `;
 
@@ -138,16 +174,8 @@
 
     function comprar(index) {
       const time = times[index];
-
-      alert(
-        `TIME: ${time.nome}\n` +
-        `VALOR DA COTA: R$ ${VALOR_COTA}\n\n` +
-        `Faça o Pix e envie o comprovante no Telegram.`
-      );
-
-      window.open(
-        `https://t.me/SEU_USUARIO?text=Comprei%20uma%20cota%20do%20time%20${encodeURIComponent(time.nome)}`
-      );
+      alert(`TIME: ${time.nome}\nVALOR: R$ ${VALOR_COTA}`);
+      window.open(`https://t.me/SEU_USUARIO?text=Comprei%20${encodeURIComponent(time.nome)}`);
     }
 
     render();
