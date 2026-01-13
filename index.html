@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Arena VIP - Elite</title>
+  <title>Arena VIP - Cadastro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
@@ -12,116 +12,160 @@
       --bg: #020617;
       --card: #0f172a;
       --text: #f8fafc;
+      --input: #1e293b;
     }
     body { 
       font-family: 'Segoe UI', sans-serif; 
       background: var(--bg); 
       color: var(--text); 
-      margin: 0; padding: 15px;
-      background-image: radial-gradient(circle at top right, #1e293b, #020617);
+      margin: 0; padding: 20px;
     }
-    .header { text-align: center; padding: 10px 0; border-bottom: 1px solid #1e293b; margin-bottom: 20px; }
-    .header h1 { color: var(--primary); margin: 0; font-size: 1.5em; cursor: pointer; }
+
+    /* Tela de Cadastro */
+    #telaCadastro { display: block; max-width: 400px; margin: 0 auto; }
+    .logo-cadastro { text-align: center; margin-bottom: 30px; }
+    .logo-cadastro h1 { color: var(--primary); font-size: 2em; margin-bottom: 5px; }
     
-    .stats-row { display: flex; gap: 10px; margin-bottom: 20px; }
-    .stat-card { background: var(--card); flex: 1; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #1e293b; }
-    .stat-label { font-size: 0.7em; color: #94a3b8; text-transform: uppercase; }
-    .stat-value { display: block; font-size: 1.2em; font-weight: bold; color: var(--gold); }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 0.8em; color: #94a3b8; margin-bottom: 5px; }
+    .form-group input, .form-group select { 
+      width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; 
+      background: var(--input); color: white; box-sizing: border-box;
+    }
 
-    .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #1e293b; position: relative; overflow: hidden; }
-    .card h3 { margin: 0 0 10px 0; font-size: 1.1em; }
-    .multiplier { color: var(--primary); font-weight: bold; font-size: 0.9em; }
+    /* Tela do Jogo (Escondida por padrão) */
+    #telaJogo { display: none; }
 
+    .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #1e293b; }
     .btn { 
       background: linear-gradient(135deg, var(--primary), #16a34a);
-      color: #000; border: none; padding: 12px; width: 100%; border-radius: 10px; 
-      font-weight: 800; margin-top: 10px; cursor: pointer;
+      color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; 
+      font-weight: 800; cursor: pointer; margin-top: 10px;
     }
-
-    /* Ranking Visual */
-    .ranking-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 0.9em; }
-    .ranking-item:last-child { border: none; }
-    .pos { color: var(--gold); font-weight: bold; margin-right: 5px; }
+    .stat-value { color: var(--gold); font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1 id="adminTrigger">⚽ ARENA DE PONTOS</h1>
+  <div id="telaCadastro">
+    <div class="logo-cadastro">
+      <h1>ARENA VIP</h1>
+      <p style="color: #94a3b8;">Crie sua conta para começar</p>
+    </div>
+
+    <div class="form-group">
+      <label>Nome Completo</label>
+      <input type="text" id="regNome" placeholder="Ex: João Silva">
+    </div>
+
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="regEmail" placeholder="seu@email.com">
+    </div>
+
+    <div class="form-group">
+        <label>País</label>
+        <select id="regPais">
+            <option value="Brasil">Brasil</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Angola">Angola</option>
+            <option value="Outro">Outro</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+      <label>Telefone / WhatsApp</label>
+      <input type="tel" id="regTel" placeholder="+55 (00) 00000-0000">
+    </div>
+
+    <button class="btn" onclick="finalizarCadastro()">CRIAR MINHA CONTA</button>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card">
-      <span class="stat-label">Meus Pontos</span>
-      <span class="stat-value" id="saldo">0</span>
+  <div id="telaJogo">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 id="welcomeUser" style="color: var(--primary);">Olá!</h2>
+        <div class="card">
+            <span style="font-size: 0.8em; color: #94a3b8;">SEU SALDO</span><br>
+            <span class="stat-value" id="saldo" style="font-size: 1.8em;">0</span> <span style="color: var(--gold);">PTS</span>
+        </div>
     </div>
-    <div class="stat-card">
-      <span class="stat-label">Status</span>
-      <span class="stat-value" style="color:var(--primary)">ATIVO</span>
-    </div>
-  </div>
 
-  <div id="jogosLista"></div>
-
-  <div class="card">
-    <h3 style="color: var(--gold); text-align:center;">🏆 LÍDERES DA SEMANA</h3>
-    <div class="ranking-item"><span><span class="pos">1º</span> Lucas_Bet</span> <strong>22.500 pts</strong></div>
-    <div class="ranking-item"><span><span class="pos">2º</span> Admin_Socio</span> <strong>18.200 pts</strong></div>
-    <div class="ranking-item"><span><span class="pos">3º</span> Você</span> <strong id="saldoRank">0 pts</strong></div>
+    <div id="jogosLista"></div>
+    
+    <button class="btn" style="background: #1e293b; color: white;" onclick="logout()">Sair / Trocar Conta</button>
   </div>
 
 <script>
   const tg = window.Telegram.WebApp;
   tg.expand();
-  tg.headerColor = "#020617";
 
-  let saldo = parseInt(localStorage.getItem("saldo")) || 0;
-  document.getElementById("saldo").innerText = saldo.toLocaleString();
-  document.getElementById("saldoRank").innerText = saldo.toLocaleString() + " pts";
+  // Verificar se já existe cadastro
+  const usuarioSalvo = JSON.parse(localStorage.getItem("usuario_arena"));
 
-  const jogos = [
-    { time: "Real Madrid", odds: 1.5 },
-    { time: "Flamengo", odds: 1.8 },
-    { time: "Palmeiras", odds: 1.9 },
-    { time: "Zebra do Dia", odds: 5.0 }
-  ];
+  if (usuarioSalvo) {
+    mostrarJogo(usuarioSalvo);
+  }
 
-  const container = document.getElementById("jogosLista");
-  jogos.forEach(j => {
-    container.innerHTML += `
-      <div class="card">
-        <h3>${j.time}</h3>
-        <span class="multiplier">Multiplicador: x${j.odds.toFixed(1)}</span>
-        <button class="btn" onclick="comprar('${j.time}')">ADQUIRIR COTA</button>
-      </div>
-    `;
-  });
+  function finalizarCadastro() {
+    const nome = document.getElementById("regNome").value;
+    const email = document.getElementById("regEmail").value;
+    const pais = document.getElementById("regPais").value;
+    const tel = document.getElementById("regTel").value;
 
-  function comprar(time) {
-    tg.HapticFeedback.impactOccurred('medium');
-    tg.showPopup({
-      title: 'Pedido de Cota',
-      message: `Time: ${time}\nValor: R$ 20,00\nRecebe: 1.000 pontos\n\nChave PIX: SUA_CHAVE_AQUI\n\nEnvie o comprovante no chat após pagar!`,
-      buttons: [{text: 'Entendido', type: 'ok'}]
+    if(!nome || !email || !tel) {
+      alert("Por favor, preencha todos os campos!");
+      return;
+    }
+
+    const usuario = { nome, email, pais, tel };
+    localStorage.setItem("usuario_arena", JSON.stringify(usuario));
+    
+    tg.HapticFeedback.notificationOccurred('success');
+    mostrarJogo(usuario);
+  }
+
+  function mostrarJogo(user) {
+    document.getElementById("telaCadastro").style.display = "none";
+    document.getElementById("telaJogo").style.display = "block";
+    document.getElementById("welcomeUser").innerText = "Olá, " + user.nome.split(' ')[0] + "!";
+    renderJogos();
+  }
+
+  function renderJogos() {
+    let saldo = localStorage.getItem("saldo") || 0;
+    document.getElementById("saldo").innerText = parseInt(saldo).toLocaleString();
+    
+    const jogos = [
+      { time: "Real Madrid", odds: 1.5 },
+      { time: "Flamengo", odds: 1.8 }
+    ];
+
+    const container = document.getElementById("jogosLista");
+    container.innerHTML = "";
+    jogos.forEach(j => {
+      container.innerHTML += `
+        <div class="card">
+          <h3>${j.time} (x${j.odds})</h3>
+          <button class="btn" onclick="solicitarCota('${j.time}')">JOGAR 1.000 PTS</button>
+        </div>
+      `;
     });
   }
 
-  // ADMIN TRIGGER
-  let clicks = 0;
-  document.getElementById("adminTrigger").onclick = () => {
-    clicks++;
-    if(clicks === 5) {
-      clicks = 0;
-      let pass = prompt("Senha Admin:");
-      if(pass === "1234") {
-        let acao = prompt("1-Creditar 1000 pts\n2-Zerar Saldo");
-        if(acao === "1") saldo += 1000;
-        if(acao === "2") saldo = 0;
-        localStorage.setItem("saldo", saldo);
+  function solicitarCota(time) {
+    tg.showPopup({
+      title: 'Quase lá!',
+      message: `Para validar seu palpite no ${time}, envie o PIX de R$ 20,00 para a chave da Arena.`,
+      buttons: [{text: 'OK', type: 'ok'}]
+    });
+  }
+
+  function logout() {
+    if(confirm("Deseja mesmo sair?")) {
+        localStorage.removeItem("usuario_arena");
         location.reload();
-      }
     }
-  };
+  }
 </script>
 </body>
 </html>
