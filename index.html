@@ -177,10 +177,51 @@
       alert(`TIME: ${time.nome}\nVALOR: R$ ${VALOR_COTA}`);
       window.open(`https://t.me/SEU_USUARIO?text=Comprei%20${encodeURIComponent(time.nome)}`);
     }
+ // ====== MODO ADMIN ======
 
+  function admin() {
+    const senha = prompt("Senha do administrador:");
+
+    if (senha !== senhaAdmin) {
+      alert("Senha incorreta");
+      return;
+    }
+
+    const nomes = times.map((t, i) => `${i + 1} - ${t.nome}`).join("\n");
+
+    const escolha = prompt(
+      "CONFIRMAR PAGAMENTO\n\nEscolha o time:\n" + nomes
+    );
+
+    const index = parseInt(escolha) - 1;
+
+    if (!times[index]) {
+      alert("Time inválido");
+      return;
+    }
+
+    if (times[index].cotas > 0) {
+      times[index].cotas--;
+      alert("Pagamento confirmado! Cota abatida.");
+      render();
+    } else {
+      alert("Cotas já esgotadas.");
+    }
+  }
+
+  // clique escondido: 5 toques no título
+  let cliques = 0;
+  document.querySelector("h1").onclick = () => {
+    cliques++;
+    if (cliques === 5) {
+      cliques = 0;
+      admin();
+    }
+  };
     render();
   </script>
 
 </body>
 </html>
+
 
