@@ -2,51 +2,72 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Bolão de Futebol</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bolão Premiado</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
-      color: white;
+      color: #e5e7eb;
       margin: 0;
       padding: 20px;
     }
 
     h1 {
       text-align: center;
-      color: #22c55e;
     }
 
-    .info {
+    .contato {
       text-align: center;
-      margin-bottom: 20px;
+      margin: 15px 0;
     }
 
-    .times {
+    .contato a {
+      background: #229ED9;
+      color: black;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .lista {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
+      margin-top: 20px;
     }
 
     .time {
-      background: #1e293b;
+      background: #020617;
+      border: 1px solid #1e293b;
       padding: 15px;
       border-radius: 10px;
       text-align: center;
     }
 
     .time button {
-      margin-top: 10px;
-      padding: 8px;
-      width: 100%;
-      border: none;
-      border-radius: 5px;
       background: #22c55e;
-      color: black;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .time button:disabled {
+      background: #475569;
+      cursor: not-allowed;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 12px;
+      text-align: center;
+      color: #94a3b8;
     }
   </style>
 </head>
@@ -55,38 +76,81 @@
 
   <h1>⚽ Bolão Premiado</h1>
 
-  <div class="info">
-    <p>🎟 77 cotas por time</p>
-    <p>💰 Prêmio varia conforme o time</p>
+  <div class="contato">
+    <a href="https://t.me/SEU_USUARIO" target="_blank">
+      ✈️ Falar no Telegram para confirmar pagamento
+    </a>
   </div>
 
-  <div class="times" id="listaTimes">
-    <!-- Os times vão aparecer aqui -->
-  </div>
+  <div class="lista" id="listaTimes"></div>
+
+  <footer>
+    ⚠️ Iniciativa independente. Pagamento via Pix com confirmação manual.
+  </footer>
 
   <script>
+    const VALOR_COTA = 20;
+
     const times = [
-      "Flamengo", "Palmeiras", "Corinthians", "São Paulo",
-      "Grêmio", "Internacional", "Atlético-MG", "Cruzeiro",
-      "Vasco", "Botafogo", "Fluminense", "Santos",
-      "Bahia", "Fortaleza", "Ceará", "Sport",
-      "Athletico-PR", "Coritiba", "Goiás", "Chapecoense"
+      { nome: "Flamengo", cotas: 77, premio: 5000 },
+      { nome: "Palmeiras", cotas: 77, premio: 4800 },
+      { nome: "Corinthians", cotas: 77, premio: 4600 },
+      { nome: "São Paulo", cotas: 77, premio: 4500 },
+      { nome: "Grêmio", cotas: 77, premio: 4400 },
+      { nome: "Internacional", cotas: 77, premio: 4300 },
+      { nome: "Atlético-MG", cotas: 77, premio: 4700 },
+      { nome: "Cruzeiro", cotas: 77, premio: 4200 },
+      { nome: "Vasco", cotas: 77, premio: 4000 },
+      { nome: "Botafogo", cotas: 77, premio: 4100 },
+      { nome: "Fluminense", cotas: 77, premio: 4050 },
+      { nome: "Santos", cotas: 77, premio: 3950 },
+      { nome: "Bahia", cotas: 77, premio: 3900 },
+      { nome: "Fortaleza", cotas: 77, premio: 3850 },
+      { nome: "Ceará", cotas: 77, premio: 3800 },
+      { nome: "Sport", cotas: 77, premio: 3750 },
+      { nome: "Athletico-PR", cotas: 77, premio: 3700 },
+      { nome: "Coritiba", cotas: 77, premio: 3650 },
+      { nome: "Goiás", cotas: 77, premio: 3600 },
+      { nome: "Chapecoense", cotas: 77, premio: 3500 }
     ];
 
     const lista = document.getElementById("listaTimes");
 
-    times.forEach(time => {
-      const div = document.createElement("div");
-      div.className = "time";
+    function render() {
+      lista.innerHTML = "";
 
-      div.innerHTML = `
-        <h3>${time}</h3>
-        <p>77 cotas disponíveis</p>
-        <button>Comprar cota</button>
-      `;
+      times.forEach((time, index) => {
+        const div = document.createElement("div");
+        div.className = "time";
 
-      lista.appendChild(div);
-    });
+        div.innerHTML = `
+          <h3>${time.nome}</h3>
+          <p>${time.cotas} cotas disponíveis</p>
+          <p><strong>Prêmio: R$ ${time.premio.toLocaleString("pt-BR")}</strong></p>
+          <button ${time.cotas === 0 ? "disabled" : ""} onclick="comprar(${index})">
+            ${time.cotas === 0 ? "Esgotado" : "Comprar cota"}
+          </button>
+        `;
+
+        lista.appendChild(div);
+      });
+    }
+
+    function comprar(index) {
+      const time = times[index];
+
+      alert(
+        `TIME: ${time.nome}\n` +
+        `VALOR DA COTA: R$ ${VALOR_COTA}\n\n` +
+        `Faça o Pix e envie o comprovante no Telegram.`
+      );
+
+      window.open(
+        `https://t.me/SEU_USUARIO?text=Comprei%20uma%20cota%20do%20time%20${encodeURIComponent(time.nome)}`
+      );
+    }
+
+    render();
   </script>
 
 </body>
