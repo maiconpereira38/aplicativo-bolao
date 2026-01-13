@@ -87,7 +87,18 @@
     { nome: "Palmeiras", mult: 1.8 },
     { nome: "Zebra", mult: 4.5 }
   ];
-
+<div class="card">
+  <h3 style="color: var(--gold); text-align:center;">🏆 TOP 3 DA SEMANA</h3>
+  <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1e293b; padding: 5px 0;">
+    <span>1. João_Palpites</span> <strong>15.400 pts</strong>
+  </div>
+  <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1e293b; padding: 5px 0;">
+    <span>2. Maria_Gols</span> <strong>12.100 pts</strong>
+  </div>
+  <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+    <span>3. Você</span> <strong id="seuRanking">0 pts</strong>
+  </div>
+</div>
   // Carregar dados salvos
   let meuSaldo = parseInt(localStorage.getItem("meu-saldo-pontos")) || 0;
   let meuHistorico = JSON.parse(localStorage.getItem("meu-historico")) || [];
@@ -176,4 +187,5 @@
 </script>
 </body>
 </html>
+
 
