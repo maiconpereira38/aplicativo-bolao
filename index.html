@@ -15,7 +15,12 @@
     body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
     
     /* TELAS */
-    #telaCadastro, #telaRegulamento, #telaJogo { display: none; }
+    #telaAcesso, #telaRegulamento, #telaJogo { display: none; }
+
+    /* SELETOR LOGIN/CADASTRO */
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; border: none; background: #1e293b; color: #94a3b8; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .tab-btn.active { background: var(--primary); color: black; }
 
     /* FORMULÁRIOS */
     .form-group { margin-bottom: 12px; }
@@ -24,7 +29,6 @@
 
     /* BOTÕES */
     .btn-principal { background: var(--primary); color: black; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    .btn-voltar { background: #475569; color: white; margin-top: 10px; }
 
     /* GRADE DE 4 COLUNAS */
     .lista { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 15px; }
@@ -45,13 +49,26 @@
 </head>
 <body>
 
-  <div id="telaCadastro">
-    <header><h1>CADASTRO ARENA</h1></header>
-    <div class="form-group"><label>Nome</label><input type="text" id="regNome"></div>
-    <div class="form-group"><label>Telefone</label><input type="tel" id="regTel"></div>
-    <div class="form-group"><label>País</label><select id="regPais"><option>Brasil</option><option>Portugal</option><option>Outros</option></select></div>
-    <div class="form-group"><label>E-mail</label><input type="email" id="regEmail"></div>
-    <button class="btn-principal" onclick="salvarCadastro()">CRIAR CONTA</button>
+  <div id="telaAcesso">
+    <header><h1>ARENA VIP</h1></header>
+    
+    <div class="tabs">
+        <button id="btnTabLogin" class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
+        <button id="btnTabReg" class="tab-btn" onclick="switchTab('reg')">CADASTRO</button>
+    </div>
+
+    <div id="boxLogin">
+        <div class="form-group"><label>E-mail Cadastrado</label><input type="email" id="loginEmail"></div>
+        <button class="btn-principal" onclick="realizarLogin()">ENTRAR</button>
+    </div>
+
+    <div id="boxReg" style="display:none;">
+        <div class="form-group"><label>Nome</label><input type="text" id="regNome"></div>
+        <div class="form-group"><label>Telefone</label><input type="tel" id="regTel"></div>
+        <div class="form-group"><label>País</label><select id="regPais"><option>Brasil</option><option>Portugal</option><option>Outros</option></select></div>
+        <div class="form-group"><label>E-mail</label><input type="email" id="regEmail"></div>
+        <button class="btn-principal" onclick="salvarCadastro()">CRIAR CONTA</button>
+    </div>
   </div>
 
   <div id="telaRegulamento">
@@ -60,8 +77,8 @@
       <p>1. O Bolão tem duração de <strong>30 dias</strong> (Temporada Mensal).</p>
       <p>2. Cada cota custa <strong>R$ 20,00</strong>.</p>
       <p>3. Ao comprar uma cota, você acumula pontos baseados no multiplicador do time.</p>
-      <p>4. Ao final dos 30 dias, os maiores pontuadores do ranking dividem a premiação.</p>
-      <p>5. O pagamento é via PIX com confirmação manual via Telegram.</p>
+      <p>4. Ao final dos 30 dias, os maiores pontuadores dividem a premiação.</p>
+      <p>5. O pagamento é via PIX com confirmação manual.</p>
     </div>
     <button class="btn-principal" style="margin-top:15px" onclick="irParaJogo()">CONCORDO E QUERO JOGAR</button>
   </div>
@@ -75,13 +92,10 @@
       Olá, <span id="nomeUser" style="color:var(--primary)"></span>!
     </div>
     <div class="lista" id="listaTimes"></div>
-    <footer style="text-align:center; font-size:9px; color:#94a3b8; margin-top:20px;">
-      Ranking reseta a cada 30 dias. Confirmar comprovantes no suporte.
-    </footer>
+    <button class="btn-principal" style="background:#1e293b; color:white; margin-top:20px; font-size:10px; padding:5px;" onclick="logout()">SAIR DA CONTA</button>
   </div>
 
 <script>
-  // BANCO DE DADOS DE TIMES (30 TIMES)
   let times = [
     { nome: "Time 01", cotas: 77, premio: 5000 }, { nome: "Time 02", cotas: 77, premio: 4800 },
     { nome: "Time 03", cotas: 77, premio: 4600 }, { nome: "Time 04", cotas: 77, premio: 4500 },
@@ -100,34 +114,66 @@
     { nome: "Time 29", cotas: 77, premio: 3000 }, { nome: "Time 30", cotas: 77, premio: 3000 }
   ];
 
-  // Carregar dados salvos do Administrador (Cotas)
+  // Carregar Cotas do Admin
   const backupCotas = localStorage.getItem("banco_cotas");
   if(backupCotas) {
     const cotasSalvas = JSON.parse(backupCotas);
     times.forEach((t, i) => t.cotas = cotasSalvas[i]);
   }
 
-  // LÓGICA DE TELAS
-  const user = localStorage.getItem("user_bolao");
-  if(!user) {
-    document.getElementById("telaCadastro").style.display = "block";
-  } else {
+  // LÓGICA DE LOGIN/CADASTRO
+  function switchTab(tab) {
+    if(tab === 'login') {
+        document.getElementById("boxLogin").style.display = "block";
+        document.getElementById("boxReg").style.display = "none";
+        document.getElementById("btnTabLogin").classList.add("active");
+        document.getElementById("btnTabReg").classList.remove("active");
+    } else {
+        document.getElementById("boxLogin").style.display = "none";
+        document.getElementById("boxReg").style.display = "block";
+        document.getElementById("btnTabLogin").classList.remove("active");
+        document.getElementById("btnTabReg").classList.add("active");
+    }
+  }
+
+  // Checar se já está logado
+  const sessaoAtiva = localStorage.getItem("sessao_usuario");
+  if(sessaoAtiva) {
     irParaJogo();
+  } else {
+    document.getElementById("telaAcesso").style.display = "block";
   }
 
   function salvarCadastro() {
     const nome = document.getElementById("regNome").value;
-    if(!nome) return alert("Digite seu nome!");
-    localStorage.setItem("user_bolao", nome);
-    document.getElementById("telaCadastro").style.display = "none";
+    const email = document.getElementById("regEmail").value;
+    if(!nome || !email) return alert("Preencha Nome e E-mail!");
+    
+    const dadosUser = { nome: nome, email: email };
+    localStorage.setItem("conta_registrada", JSON.stringify(dadosUser));
+    localStorage.setItem("sessao_usuario", nome);
+    
+    document.getElementById("telaAcesso").style.display = "none";
     document.getElementById("telaRegulamento").style.display = "block";
   }
 
+  function realizarLogin() {
+    const email = document.getElementById("loginEmail").value;
+    const conta = JSON.parse(localStorage.getItem("conta_registrada"));
+
+    if(conta && conta.email === email) {
+        localStorage.setItem("sessao_usuario", conta.nome);
+        irParaJogo();
+    } else {
+        alert("E-mail não encontrado ou sem cadastro!");
+    }
+  }
+
   function irParaJogo() {
-    document.getElementById("telaCadastro").style.display = "none";
+    document.getElementById("telaAcesso").style.display = "none";
     document.getElementById("telaRegulamento").style.display = "none";
     document.getElementById("telaJogo").style.display = "block";
-    document.getElementById("nomeUser").innerText = localStorage.getItem("user_bolao");
+    document.getElementById("nomeUser").innerText = localStorage.getItem("sessao_usuario");
     render();
   }
 
@@ -148,19 +194,17 @@
 
   function comprar(index) {
     const t = times[index];
-    alert(`TIME: ${t.nome}\nValor: R$ 20,00\nConfirme no Telegram!`);
+    alert(`CONFIRMAR: ${t.nome}\nValor: R$ 20,00`);
     window.open(`https://t.me/SEU_USUARIO?text=Olá, quero cota do ${t.nome}`);
   }
 
-  // MODO ADMINISTRADOR PARA ALTERAR COTAS
   function modoAdmin() {
     let senha = prompt("Senha Admin:");
     if(senha === "1234") {
-      let idx = prompt("Digite o número do Time (1 a 30):");
-      let novoValor = prompt("Novo número de cotas:");
+      let idx = prompt("Nº do Time (1 a 30):");
+      let novoValor = prompt("Cotas restantes:");
       if(idx && novoValor) {
         times[parseInt(idx)-1].cotas = parseInt(novoValor);
-        // Salvar permanentemente as cotas alteradas
         const apenasCotas = times.map(t => t.cotas);
         localStorage.setItem("banco_cotas", JSON.stringify(apenasCotas));
         render();
@@ -168,7 +212,10 @@
     }
   }
 
-  render();
+  function logout() {
+    localStorage.removeItem("sessao_usuario");
+    location.reload();
+  }
 </script>
 </body>
 </html>
