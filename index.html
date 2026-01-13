@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Arena VIP - Cadastro</title>
+  <title>Arena VIP - Acesso</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
@@ -14,71 +14,70 @@
       --text: #f8fafc;
       --input: #1e293b;
     }
-    body { 
-      font-family: 'Segoe UI', sans-serif; 
-      background: var(--bg); 
-      color: var(--text); 
-      margin: 0; padding: 20px;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+    
+    /* Alternador de Abas */
+    .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
+    .tab-btn { flex: 1; padding: 10px; border: none; background: var(--card); color: #94a3b8; border-radius: 8px; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; }
+    .tab-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); background: #1e293b; }
 
-    /* Tela de Cadastro */
-    #telaCadastro { display: block; max-width: 400px; margin: 0 auto; }
-    .logo-cadastro { text-align: center; margin-bottom: 30px; }
-    .logo-cadastro h1 { color: var(--primary); font-size: 2em; margin-bottom: 5px; }
+    #telaAcesso { display: block; max-width: 400px; margin: 0 auto; }
+    #telaJogo { display: none; }
+
+    .logo { text-align: center; margin-bottom: 20px; }
+    .logo h1 { color: var(--primary); font-size: 2em; margin: 0; }
     
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-size: 0.8em; color: #94a3b8; margin-bottom: 5px; }
     .form-group input, .form-group select { 
       width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; 
-      background: var(--input); color: white; box-sizing: border-box;
+      background: var(--input); color: white; box-sizing: border-box; outline: none;
     }
 
-    /* Tela do Jogo (Escondida por padrão) */
-    #telaJogo { display: none; }
-
-    .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #1e293b; }
     .btn { 
       background: linear-gradient(135deg, var(--primary), #16a34a);
       color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; 
       font-weight: 800; cursor: pointer; margin-top: 10px;
     }
-    .stat-value { color: var(--gold); font-weight: bold; }
+    .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #1e293b; }
+    .stat-value { color: var(--gold); font-weight: bold; font-size: 1.8em; }
   </style>
 </head>
 <body>
 
-  <div id="telaCadastro">
-    <div class="logo-cadastro">
-      <h1>ARENA VIP</h1>
-      <p style="color: #94a3b8;">Crie sua conta para começar</p>
+  <div id="telaAcesso">
+    <div class="logo">
+        <h1>ARENA VIP</h1>
     </div>
 
-    <div class="form-group">
-      <label>Nome Completo</label>
-      <input type="text" id="regNome" placeholder="Ex: João Silva">
+    <div class="tabs">
+        <button id="btnTabLogin" class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
+        <button id="btnTabReg" class="tab-btn" onclick="switchTab('reg')">CADASTRO</button>
     </div>
 
-    <div class="form-group">
-      <label>E-mail</label>
-      <input type="email" id="regEmail" placeholder="seu@email.com">
+    <div id="formLogin">
+        <div class="form-group">
+            <label>E-mail cadastrado</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com">
+        </div>
+        <button class="btn" onclick="fazerLogin()">ENTRAR NO JOGO</button>
     </div>
 
-    <div class="form-group">
-        <label>País</label>
-        <select id="regPais">
-            <option value="Brasil">Brasil</option>
-            <option value="Portugal">Portugal</option>
-            <option value="Angola">Angola</option>
-            <option value="Outro">Outro</option>
-        </select>
+    <div id="formReg" style="display: none;">
+        <div class="form-group">
+            <label>Nome Completo</label>
+            <input type="text" id="regNome" placeholder="Ex: João Silva">
+        </div>
+        <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" id="regEmail" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+            <label>Telefone / WhatsApp</label>
+            <input type="tel" id="regTel" placeholder="+55 (00) 00000-0000">
+        </div>
+        <button class="btn" onclick="finalizarCadastro()">CRIAR CONTA</button>
     </div>
-
-    <div class="form-group">
-      <label>Telefone / WhatsApp</label>
-      <input type="tel" id="regTel" placeholder="+55 (00) 00000-0000">
-    </div>
-
-    <button class="btn" onclick="finalizarCadastro()">CRIAR MINHA CONTA</button>
   </div>
 
   <div id="telaJogo">
@@ -86,12 +85,10 @@
         <h2 id="welcomeUser" style="color: var(--primary);">Olá!</h2>
         <div class="card">
             <span style="font-size: 0.8em; color: #94a3b8;">SEU SALDO</span><br>
-            <span class="stat-value" id="saldo" style="font-size: 1.8em;">0</span> <span style="color: var(--gold);">PTS</span>
+            <span class="stat-value" id="saldo">0</span> <span style="color: var(--gold);">PTS</span>
         </div>
     </div>
-
     <div id="jogosLista"></div>
-    
     <button class="btn" style="background: #1e293b; color: white;" onclick="logout()">Sair / Trocar Conta</button>
   </div>
 
@@ -99,33 +96,55 @@
   const tg = window.Telegram.WebApp;
   tg.expand();
 
-  // Verificar se já existe cadastro
-  const usuarioSalvo = JSON.parse(localStorage.getItem("usuario_arena"));
+  // Verifica se já está logado
+  const usuarioLogado = JSON.parse(localStorage.getItem("usuario_sessao"));
+  if (usuarioLogado) { mostrarJogo(usuarioLogado); }
 
-  if (usuarioSalvo) {
-    mostrarJogo(usuarioSalvo);
+  function switchTab(tab) {
+    if(tab === 'login') {
+        document.getElementById("formLogin").style.display = "block";
+        document.getElementById("formReg").style.display = "none";
+        document.getElementById("btnTabLogin").classList.add("active");
+        document.getElementById("btnTabReg").classList.remove("active");
+    } else {
+        document.getElementById("formLogin").style.display = "none";
+        document.getElementById("formReg").style.display = "block";
+        document.getElementById("btnTabLogin").classList.remove("active");
+        document.getElementById("btnTabReg").classList.add("active");
+    }
   }
 
   function finalizarCadastro() {
     const nome = document.getElementById("regNome").value;
     const email = document.getElementById("regEmail").value;
-    const pais = document.getElementById("regPais").value;
     const tel = document.getElementById("regTel").value;
 
-    if(!nome || !email || !tel) {
-      alert("Por favor, preencha todos os campos!");
-      return;
-    }
+    if(!nome || !email || !tel) { alert("Preencha tudo!"); return; }
 
-    const usuario = { nome, email, pais, tel };
-    localStorage.setItem("usuario_arena", JSON.stringify(usuario));
+    const novoUsuario = { nome, email, tel };
+    // Salva no "banco de dados" do aparelho
+    localStorage.setItem("usuario_registrado", JSON.stringify(novoUsuario));
+    // Cria a sessão ativa
+    localStorage.setItem("usuario_sessao", JSON.stringify(novoUsuario));
     
     tg.HapticFeedback.notificationOccurred('success');
-    mostrarJogo(usuario);
+    mostrarJogo(novoUsuario);
+  }
+
+  function fazerLogin() {
+    const email = document.getElementById("loginEmail").value;
+    const registrado = JSON.parse(localStorage.getItem("usuario_registrado"));
+
+    if (registrado && registrado.email === email) {
+        localStorage.setItem("usuario_sessao", JSON.stringify(registrado));
+        mostrarJogo(registrado);
+    } else {
+        alert("E-mail não encontrado! Por favor, cadastre-se primeiro.");
+    }
   }
 
   function mostrarJogo(user) {
-    document.getElementById("telaCadastro").style.display = "none";
+    document.getElementById("telaAcesso").style.display = "none";
     document.getElementById("telaJogo").style.display = "block";
     document.getElementById("welcomeUser").innerText = "Olá, " + user.nome.split(' ')[0] + "!";
     renderJogos();
@@ -134,37 +153,18 @@
   function renderJogos() {
     let saldo = localStorage.getItem("saldo") || 0;
     document.getElementById("saldo").innerText = parseInt(saldo).toLocaleString();
-    
-    const jogos = [
-      { time: "Real Madrid", odds: 1.5 },
-      { time: "Flamengo", odds: 1.8 }
-    ];
-
     const container = document.getElementById("jogosLista");
-    container.innerHTML = "";
-    jogos.forEach(j => {
-      container.innerHTML += `
+    container.innerHTML = `
         <div class="card">
-          <h3>${j.time} (x${j.odds})</h3>
-          <button class="btn" onclick="solicitarCota('${j.time}')">JOGAR 1.000 PTS</button>
+            <h3>Flamengo (x1.8)</h3>
+            <button class="btn" onclick="alert('PIX: SUA_CHAVE')">JOGAR 1.000 PTS</button>
         </div>
-      `;
-    });
-  }
-
-  function solicitarCota(time) {
-    tg.showPopup({
-      title: 'Quase lá!',
-      message: `Para validar seu palpite no ${time}, envie o PIX de R$ 20,00 para a chave da Arena.`,
-      buttons: [{text: 'OK', type: 'ok'}]
-    });
+    `;
   }
 
   function logout() {
-    if(confirm("Deseja mesmo sair?")) {
-        localStorage.removeItem("usuario_arena");
-        location.reload();
-    }
+    localStorage.removeItem("usuario_sessao");
+    location.reload();
   }
 </script>
 </body>
