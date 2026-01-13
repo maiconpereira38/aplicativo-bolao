@@ -150,16 +150,35 @@
     renderJogos();
   }
 
-  function renderJogos() {
+ function renderJogos() {
     let saldo = localStorage.getItem("saldo") || 0;
     document.getElementById("saldo").innerText = parseInt(saldo).toLocaleString();
     const container = document.getElementById("jogosLista");
-    container.innerHTML = `
+    
+    // LISTA DE 30 TIMES PARA VOCÊ EDITAR OS NOMES E ODDS
+    const listaTrintaTimes = [
+      { t: "Time 01", o: 1.5 }, { t: "Time 02", o: 1.8 }, { t: "Time 03", o: 2.0 },
+      { t: "Time 04", o: 1.5 }, { t: "Time 05", o: 1.8 }, { t: "Time 06", o: 2.0 },
+      { t: "Time 07", o: 1.5 }, { t: "Time 08", o: 1.8 }, { t: "Time 09", o: 2.0 },
+      { t: "Time 10", o: 1.5 }, { t: "Time 11", o: 1.8 }, { t: "Time 12", o: 2.0 },
+      { t: "Time 13", o: 1.5 }, { t: "Time 14", o: 1.8 }, { t: "Time 15", o: 2.0 },
+      { t: "Time 16", o: 1.5 }, { t: "Time 17", o: 1.8 }, { t: "Time 18", o: 2.0 },
+      { t: "Time 19", o: 1.5 }, { t: "Time 20", o: 1.8 }, { t: "Time 21", o: 2.0 },
+      { t: "Time 22", o: 1.5 }, { t: "Time 23", o: 1.8 }, { t: "Time 24", o: 2.0 },
+      { t: "Time 25", o: 1.5 }, { t: "Time 26", o: 1.8 }, { t: "Time 27", o: 2.0 },
+      { t: "Time 28", o: 1.5 }, { t: "Time 29", o: 1.8 }, { t: "Time 30", o: 2.0 }
+    ];
+
+    container.innerHTML = ""; // Limpa a lista antes de renderizar
+    
+    listaTrintaTimes.forEach(item => {
+      container.innerHTML += `
         <div class="card">
-            <h3>Flamengo (x1.8)</h3>
+            <h3>${item.t} (x${item.o.toFixed(1)})</h3>
             <button class="btn" onclick="alert('PIX: SUA_CHAVE')">JOGAR 1.000 PTS</button>
         </div>
-    `;
+      `;
+    });
   }
 
   function logout() {
@@ -169,3 +188,4 @@
 </script>
 </body>
 </html>
+
