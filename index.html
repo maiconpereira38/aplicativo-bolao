@@ -174,9 +174,16 @@
 
     function comprar(index) {
       const time = times[index];
-      alert(`TIME: ${time.nome}\nVALOR: R$ ${VALOR_COTA}`);
-      window.open(`https://t.me/SEU_USUARIO?text=Comprei%20${encodeURIComponent(time.nome)}`);
-    }
+      }
+
+    alert(
+      `PAGAMENTO VIA PIX\n\n` +
+      `Time: ${time.nome}\n` +
+      `Valor: R$ ${valorCota.toFixed(2)}\n\n` +
+      `Chave Pix: SUA_CHAVE_PIX_AQUI\n\n` +
+      `Após pagar, envie o comprovante.`
+    );
+  }
  // ====== MODO ADMIN ======
 
   function admin() {
@@ -223,5 +230,6 @@
 
 </body>
 </html>
+
 
 
