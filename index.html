@@ -114,14 +114,12 @@
     { nome: "Time 29", cotas: 77, premio: 3000 }, { nome: "Time 30", cotas: 77, premio: 3000 }
   ];
 
-  // Carregar Cotas do Admin
   const backupCotas = localStorage.getItem("banco_cotas");
   if(backupCotas) {
     const cotasSalvas = JSON.parse(backupCotas);
     times.forEach((t, i) => t.cotas = cotasSalvas[i]);
   }
 
-  // LÓGICA DE LOGIN/CADASTRO
   function switchTab(tab) {
     if(tab === 'login') {
         document.getElementById("boxLogin").style.display = "block";
@@ -136,37 +134,28 @@
     }
   }
 
-  // Checar se já está logado
   const sessaoAtiva = localStorage.getItem("sessao_usuario");
-  if(sessaoAtiva) {
-    irParaJogo();
-  } else {
-    document.getElementById("telaAcesso").style.display = "block";
-  }
+  if(sessaoAtiva) { irParaJogo(); } else { document.getElementById("telaAcesso").style.display = "block"; }
 
   function salvarCadastro() {
     const nome = document.getElementById("regNome").value;
     const email = document.getElementById("regEmail").value;
+    const tel = document.getElementById("regTel").value;
     if(!nome || !email) return alert("Preencha Nome e E-mail!");
     
-    const dadosUser = { nome: nome, email: email };
+    const dadosUser = { nome: nome, email: email, tel: tel };
     localStorage.setItem("conta_registrada", JSON.stringify(dadosUser));
     localStorage.setItem("sessao_usuario", nome);
-    
-    document.getElementById("telaAcesso").style.display = "none";
-    document.getElementById("telaRegulamento").style.display = "block";
+    irParaJogo();
   }
 
   function realizarLogin() {
     const email = document.getElementById("loginEmail").value;
     const conta = JSON.parse(localStorage.getItem("conta_registrada"));
-
     if(conta && conta.email === email) {
         localStorage.setItem("sessao_usuario", conta.nome);
         irParaJogo();
-    } else {
-        alert("E-mail não encontrado ou sem cadastro!");
-    }
+    } else { alert("E-mail não encontrado!"); }
   }
 
   function irParaJogo() {
@@ -192,30 +181,43 @@
     });
   }
 
+  // AQUI ESTÁ A ETIQUETA QUE VOCÊ PEDIU
   function comprar(index) {
     const t = times[index];
-    alert(`CONFIRMAR: ${t.nome}\nValor: R$ 20,00`);
-    window.open(`https://t.me/SEU_USUARIO?text=Olá, quero cota do ${t.nome}`);
+    const nomeUsuario = localStorage.getItem("sessao_usuario");
+    const dataHora = new Date().toLocaleString('pt-BR');
+    
+    // Montando o texto da etiqueta (pulei linhas com %0A para o Telegram entender)
+    const etiqueta = `🎟️ *RESERVA DE COTA* 🎟️%0A%0A` +
+                     `👤 *CLIENTE:* ${nomeUsuario}%0A` +
+                     `⚽ *TIME:* ${t.nome}%0A` +
+                     `💰 *VALOR:* R$ 20,00%0A` +
+                     `📊 *DISPONÍVEIS:* ${t.cotas} cotas%0A` +
+                     `📅 *DATA:* ${dataHora}%0A%0A` +
+                     `⚠️ _Aguardando comprovante PIX para validar._`;
+
+    alert(`Reserva Gerada para: ${t.nome}\nClique em OK para enviar o comprovante.`);
+    
+    // Abre o seu Telegram já com a etiqueta escrita na barra de mensagem dele
+    window.open(`https://t.me/SEU_USUARIO?text=${etiqueta}`);
   }
 
   function modoAdmin() {
-    let senha = prompt("Senha Admin:");
+    let senha = prompt("Senha:");
     if(senha === "1234") {
-      let idx = prompt("Nº do Time (1 a 30):");
-      let novoValor = prompt("Cotas restantes:");
-      if(idx && novoValor) {
-        times[parseInt(idx)-1].cotas = parseInt(novoValor);
-        const apenasCotas = times.map(t => t.cotas);
-        localStorage.setItem("banco_cotas", JSON.stringify(apenasCotas));
+      let idx = prompt("Time (1-30):");
+      let v = prompt("Cotas:");
+      if(idx && v) {
+        times[parseInt(idx)-1].cotas = parseInt(v);
+        localStorage.setItem("banco_cotas", JSON.stringify(times.map(t => t.cotas)));
         render();
       }
     }
   }
 
-  function logout() {
-    localStorage.removeItem("sessao_usuario");
-    location.reload();
-  }
+  function logout() { localStorage.removeItem("sessao_usuario"); location.reload(); }
+  render();
 </script>
 </body>
 </html>
+
