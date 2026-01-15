@@ -190,36 +190,47 @@ function comprar(index) {
     const dataHora = new Date().toLocaleString('pt-BR');
     
     // 1. Pergunta a quantidade de cotas
-    let qtd = prompt(`Quantas cotas você quer para o ${t.nome}?`, "1");
-    if (qtd === null || qtd === "" || isNaN(qtd) || qtd < 1) return; // Cancela se não for número válido
+    let qtd = prompt(`Quantas cotas você deseja para o ${t.nome}?`, "1");
+    
+    // Validação simples: se cancelar ou não digitar número, para aqui.
+    if (qtd === null || qtd === "" || isNaN(qtd) || qtd < 1) return;
 
     // 2. Pergunta o tipo de palpite
-    let palpite = prompt(`Escolha o palpite para ${t.nome}:\n1 - Vitória\n2 - Empate\n3 - Placar Exato`, "1");
+    let palpite = prompt(`Escolha o tipo de aposta para ${t.nome}:\n1 - Vitória\n2 - Empate\n3 - Placar Exato`, "1");
     
+    if (palpite === null) return; // Se cancelar, para o processo.
+
     let textoPalpite = "";
-    if (palpite === "1") textoPalpite = "Vitória";
-    else if (palpite === "2") textoPalpite = "Empate";
-    else if (palpite === "3") {
-        let placar = prompt("Qual o placar exato? (Ex: 2x1)");
-        textoPalpite = `Placar Exato (${placar})`;
+    if (palpite === "1") {
+        textoPalpite = "VITORIA";
+    } else if (palpite === "2") {
+        textoPalpite = "EMPATE";
+    } else if (palpite === "3") {
+        let placar = prompt("Digite o PLACAR EXATO (Ex: 2x1):");
+        if (placar === null || placar === "") return;
+        textoPalpite = `PLACAR EXATO (${placar})`;
     } else {
-        alert("Opção inválida!");
+        alert("Opção inválida! Tente novamente.");
         return;
     }
 
+    // Cálculo do valor
     const valorTotal = qtd * 20;
 
-    // Montando a nova etiqueta detalhada
-    const etiqueta = `🎟️ *RESERVA DE BOLÃO* 🎟️%0A%0A` +
+    // MONTAGEM DO COMPROVANTE PARA O TELEGRAM
+    const etiqueta = `✅ *NOVA RESERVA CONFIRMADA* ✅%0A%0A` +
                      `👤 *CLIENTE:* ${nomeUsuario}%0A` +
                      `⚽ *TIME:* ${t.nome}%0A` +
-                     `🎯 *PALPITE:* ${textoPalpite}%0A` +
-                     `🎫 *QTDE COTAS:* ${qtd}%0A` +
-                     `💰 *TOTAL:* R$ ${valorTotal},00%0A` +
-                     `📅 *DATA:* ${dataHora}%0A%0A` +
-                     `⚠️ _Aguardando comprovante PIX para validar._`;
+                     `🎯 *APOSTA:* ${textoPalpite}%0A` +
+                     `🎫 *COTAS:* ${qtd}%0A` +
+                     `💰 *VALOR TOTAL:* R$ ${valorTotal},00%0A` +
+                     `📅 *DATA/HORA:* ${dataHora}%0A%0A` +
+                     `----------------------------%0A` +
+                     `🚀 *ENVIE O COMPROVANTE PIX ABAIXO*`;
 
-    alert(`Reserva de ${qtd} cota(s) gerada!\nPalpite: ${textoPalpite}\nTotal: R$ ${valorTotal},00`);
+    // REDIRECIONAMENTO AUTOMÁTICO
+    // O sistema avisa e, ao clicar em OK, já abre seu Telegram
+    alert(`Reserva Finalizada!\nEnviando detalhes do palpite (${textoPalpite}) para o suporte.`);
     
     window.open(`https://t.me/+ZYEaGErJ4JxhZTYx?text=${etiqueta}`);
   }
@@ -242,4 +253,5 @@ function comprar(index) {
 </script>
 </body>
 </html>
+
 
