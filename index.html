@@ -94,6 +94,7 @@
     <div class="lista" id="listaTimes"></div>
     <button class="btn-principal" style="background:#1e293b; color:white; margin-top:20px; font-size:10px; padding:5px;" onclick="logout()">SAIR DA CONTA</button>
   </div>
+
 <script>
   let times = [
     { nome: "Time 01", cotas: 77, premio: 5000 }, { nome: "Time 02", cotas: 77, premio: 4800 },
@@ -145,7 +146,10 @@
     const dadosUser = { nome: nome, email: email, tel: tel };
     localStorage.setItem("conta_registrada", JSON.stringify(dadosUser));
     localStorage.setItem("sessao_usuario", nome);
-    irParaJogo();
+    
+    // CORREÇÃO AQUI: Esconde a tela de acesso e mostra o REGULAMENTO em vez de ir direto pro jogo
+    document.getElementById("telaAcesso").style.display = "none";
+    document.getElementById("telaRegulamento").style.display = "block";
   }
 
   function realizarLogin() {
@@ -180,13 +184,11 @@
     });
   }
 
-  // AQUI ESTÁ A ETIQUETA QUE VOCÊ PEDIU
   function comprar(index) {
     const t = times[index];
     const nomeUsuario = localStorage.getItem("sessao_usuario");
     const dataHora = new Date().toLocaleString('pt-BR');
     
-    // Montando o texto da etiqueta (pulei linhas com %0A para o Telegram entender)
     const etiqueta = `🎟️ *RESERVA DE COTA* 🎟️%0A%0A` +
                      `👤 *CLIENTE:* ${nomeUsuario}%0A` +
                      `⚽ *TIME:* ${t.nome}%0A` +
@@ -196,8 +198,6 @@
                      `⚠️ _Aguardando comprovante PIX para validar._`;
 
     alert(`Reserva Gerada para: ${t.nome}\nClique em OK para enviar o comprovante.`);
-    
-    // Abre o seu Telegram já com a etiqueta escrita na barra de mensagem dele
     window.open(`https://t.me/+ZYEaGErJ4JxhZTYx?text=${etiqueta}`);
   }
 
@@ -219,13 +219,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
