@@ -13,40 +13,55 @@
       --gold: #f59e0b;
     }
     body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+    
+    /* TELAS */
     #telaAcesso, #telaRegulamento, #telaJogo { display: none; }
+
+    /* SELETOR LOGIN/CADASTRO */
     .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
     .tab-btn { flex: 1; padding: 10px; border: none; background: #1e293b; color: #94a3b8; border-radius: 8px; cursor: pointer; font-weight: bold; }
     .tab-btn.active { background: var(--primary); color: black; }
+
+    /* FORMULÁRIOS */
     .form-group { margin-bottom: 12px; }
     label { display: block; font-size: 0.8em; margin-bottom: 4px; color: #94a3b8; }
     input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #1e293b; background: #1e293b; color: white; box-sizing: border-box; }
+
+    /* BOTÕES */
     .btn-principal { background: var(--primary); color: black; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+    /* GRADE DE 4 COLUNAS */
     .lista { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 15px; }
     .time { background: var(--card); border: 1px solid #1e293b; padding: 6px 2px; border-radius: 6px; text-align: center; }
     .time h3 { margin: 0; font-size: 0.65em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .time p { margin: 2px 0; font-size: 0.55em; color: #94a3b8; }
     .time p strong { color: var(--gold); }
     .time button { background: var(--primary); border: none; padding: 5px; width: 90%; border-radius: 4px; font-weight: bold; font-size: 0.65em; cursor: pointer; margin-top: 4px; }
+
+    /* REGULAMENTO */
     .reg-box { background: var(--card); padding: 15px; border-radius: 10px; font-size: 0.85em; line-height: 1.4; border: 1px solid #1e293b; }
+    
     header { text-align: center; margin-bottom: 15px; }
     header h1 { font-size: 1.3em; color: var(--primary); cursor: pointer; }
     .contato { text-align: center; margin-bottom: 10px; }
     .contato a { background: #229ED9; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; }
-    .btn-afiliado { background: #f59e0b; color: black; font-size: 10px; padding: 8px; border-radius: 6px; border: none; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
   </style>
 </head>
 <body>
 
   <div id="telaAcesso">
     <header><h1>ARENA VIP</h1></header>
+    
     <div class="tabs">
         <button id="btnTabLogin" class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
         <button id="btnTabReg" class="tab-btn" onclick="switchTab('reg')">CADASTRO</button>
     </div>
+
     <div id="boxLogin">
         <div class="form-group"><label>E-mail Cadastrado</label><input type="email" id="loginEmail"></div>
         <button class="btn-principal" onclick="realizarLogin()">ENTRAR</button>
     </div>
+
     <div id="boxReg" style="display:none;">
         <div class="form-group"><label>Nome</label><input type="text" id="regNome"></div>
         <div class="form-group"><label>Telefone</label><input type="tel" id="regTel"></div>
@@ -59,24 +74,23 @@
   <div id="telaRegulamento">
     <header><h1>REGULAMENTO</h1></header>
     <div class="reg-box">
-      <p>1. Temporada Mensal de <strong>30 dias</strong>.</p>
-      <p>2. Cota: <strong>R$ 20,00</strong>.</p>
-      <p>3. Cada indicação vale <strong>300 Pontos</strong>.</p>
-      <p>4. Pagamento via PIX manual.</p>
+      <p>1. O Bolão tem duração de <strong>30 dias</strong> (Temporada Mensal).</p>
+      <p>2. Cada cota custa <strong>R$ 20,00</strong>.</p>
+      <p>3. Ao comprar uma cota, você acumula pontos baseados no multiplicador do time.</p>
+      <p>4. Ao final dos 30 dias, os maiores pontuadores dividem a premiação.</p>
+      <p>5. O pagamento é via PIX com confirmação manual.</p>
     </div>
     <button class="btn-principal" style="margin-top:15px" onclick="irParaJogo()">CONCORDO E QUERO JOGAR</button>
   </div>
 
   <div id="telaJogo">
     <header><h1 onclick="modoAdmin()">⚽ BOLÃO PREMIADO</h1></header>
-    <div class="contato"><a href="https://t.me/SEU_USUARIO" target="_blank">✈️ Confirmar Pagamento</a></div>
-    
-    <div style="text-align:center; font-size: 0.8em; margin-bottom: 10px; background: #1e293b; padding: 10px; border-radius: 8px;">
-      Olá, <span id="nomeUser" style="color:var(--primary)"></span>!<br>
-      Saldo: <span id="saldoUser" style="color:var(--gold); font-weight:bold;">0</span> pts
-      <button class="btn-afiliado" onclick="gerarLinkAfiliado()">🔗 GERAR LINK DE INDICAÇÃO (+300 pts)</button>
+    <div class="contato">
+      <a href="https://t.me/SEU_USUARIO" target="_blank">✈️ Confirmar Pagamento</a>
     </div>
-
+    <div style="text-align:center; font-size: 0.8em; margin-bottom: 10px;">
+      Olá, <span id="nomeUser" style="color:var(--primary)"></span>!
+    </div>
     <div class="lista" id="listaTimes"></div>
     <button class="btn-principal" style="background:#1e293b; color:white; margin-top:20px; font-size:10px; padding:5px;" onclick="logout()">SAIR DA CONTA</button>
   </div>
@@ -100,7 +114,11 @@
     { nome: "Time 29", cotas: 77, premio: 3000 }, { nome: "Time 30", cotas: 77, premio: 3000 }
   ];
 
-  let saldo = parseInt(localStorage.getItem("saldo_pontos")) || 0;
+  const backupCotas = localStorage.getItem("banco_cotas");
+  if(backupCotas) {
+    const cotasSalvas = JSON.parse(backupCotas);
+    times.forEach((t, i) => t.cotas = cotasSalvas[i]);
+  }
 
   function switchTab(tab) {
     if(tab === 'login') {
@@ -122,21 +140,13 @@
   function salvarCadastro() {
     const nome = document.getElementById("regNome").value;
     const email = document.getElementById("regEmail").value;
+    const tel = document.getElementById("regTel").value;
     if(!nome || !email) return alert("Preencha Nome e E-mail!");
     
-    // VERIFICA SE FOI INDICADO
-    const urlParams = new URLSearchParams(window.location.search);
-    const indicadoPor = urlParams.get('ref');
-    if(indicadoPor) {
-        alert("Parabéns! Você foi indicado por " + indicadoPor);
-        // Aqui simulamos que quem indicou ganharia os pontos (no banco de dados real isso seria automático)
-    }
-
-    const dadosUser = { nome: nome, email: email };
+    const dadosUser = { nome: nome, email: email, tel: tel };
     localStorage.setItem("conta_registrada", JSON.stringify(dadosUser));
     localStorage.setItem("sessao_usuario", nome);
-    document.getElementById("telaAcesso").style.display = "none";
-    document.getElementById("telaRegulamento").style.display = "block";
+    irParaJogo();
   }
 
   function realizarLogin() {
@@ -153,29 +163,7 @@
     document.getElementById("telaRegulamento").style.display = "none";
     document.getElementById("telaJogo").style.display = "block";
     document.getElementById("nomeUser").innerText = localStorage.getItem("sessao_usuario");
-    document.getElementById("saldoUser").innerText = saldo;
     render();
-  }
-
-  function gerarLinkAfiliado() {
-    const nome = localStorage.getItem("sessao_usuario");
-    const linkBase = window.location.href.split('?')[0];
-    const linkFinal = `${linkBase}?ref=${encodeURIComponent(nome)}`;
-    
-    // Copiar para área de transferência
-    const tempInput = document.createElement("input");
-    document.body.appendChild(tempInput);
-    tempInput.value = linkFinal;
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-
-    // DAR OS PONTOS (Simulação Local)
-    saldo += 300;
-    localStorage.setItem("saldo_pontos", saldo);
-    document.getElementById("saldoUser").innerText = saldo;
-
-    alert("LINK COPIADO!\nEnvie para um amigo. Você ganhou 300 pontos pela divulgação!");
   }
 
   function render() {
@@ -193,10 +181,24 @@
     });
   }
 
+  // AQUI ESTÁ A ETIQUETA QUE VOCÊ PEDIU
   function comprar(index) {
     const t = times[index];
     const nomeUsuario = localStorage.getItem("sessao_usuario");
-    const etiqueta = `🎟️ *RESERVA DE COTA* 🎟️%0A%0A👤 *CLIENTE:* ${nomeUsuario}%0A⚽ *TIME:* ${t.nome}%0A💰 *VALOR:* R$ 20,00`;
+    const dataHora = new Date().toLocaleString('pt-BR');
+    
+    // Montando o texto da etiqueta (pulei linhas com %0A para o Telegram entender)
+    const etiqueta = `🎟️ *RESERVA DE COTA* 🎟️%0A%0A` +
+                     `👤 *CLIENTE:* ${nomeUsuario}%0A` +
+                     `⚽ *TIME:* ${t.nome}%0A` +
+                     `💰 *VALOR:* R$ 20,00%0A` +
+                     `📊 *DISPONÍVEIS:* ${t.cotas} cotas%0A` +
+                     `📅 *DATA:* ${dataHora}%0A%0A` +
+                     `⚠️ _Aguardando comprovante PIX para validar._`;
+
+    alert(`Reserva Gerada para: ${t.nome}\nClique em OK para enviar o comprovante.`);
+    
+    // Abre o seu Telegram já com a etiqueta escrita na barra de mensagem dele
     window.open(`https://t.me/SEU_USUARIO?text=${etiqueta}`);
   }
 
@@ -207,12 +209,16 @@
       let v = prompt("Cotas:");
       if(idx && v) {
         times[parseInt(idx)-1].cotas = parseInt(v);
+        localStorage.setItem("banco_cotas", JSON.stringify(times.map(t => t.cotas)));
         render();
       }
     }
   }
 
   function logout() { localStorage.removeItem("sessao_usuario"); location.reload(); }
+  render();
 </script>
 </body>
 </html>
+
+
