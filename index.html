@@ -193,32 +193,12 @@
     });
   }
 
- function comprar(index) {
+  function comprar(index) {
     const t = times[index];
     const nomeUsuario = localStorage.getItem("sessao_usuario");
-    const saldoAtual = localStorage.getItem("saldo_pontos") || 0;
-    const dataHora = new Date().toLocaleString('pt-BR');
-
-    // VERIFICA SE O USUÁRIO VEIO POR UM LINK DE AFILIADO
-    const urlParams = new URLSearchParams(window.location.search);
-    const indicadoPor = urlParams.get('ref') || "Ninguém (Direto)";
-
-    // Montando a etiqueta com os novos dados
-    const etiqueta = `🎟️ *RESERVA DE COTA* 🎟️%0A%0A` +
-                     `👤 *CLIENTE:* ${nomeUsuario}%0A` +
-                     `⚽ *TIME:* ${t.nome}%0A` +
-                     `💰 *VALOR:* R$ 20,00%0A` +
-                     `🏆 *SALDO PTS:* ${saldoAtual}%0A` +
-                     `🤝 *INDICADO POR:* ${indicadoPor}%0A` +
-                     `📅 *DATA:* ${dataHora}%0A%0A` +
-                     `⚠️ _Aguardando comprovante PIX para validar._`;
-
-    alert(`Reserva Gerada para: ${t.nome}\nClique em OK para enviar.`);
-    
-    // Abre o seu Telegram com a etiqueta completa
+    const etiqueta = `🎟️ *RESERVA DE COTA* 🎟️%0A%0A👤 *CLIENTE:* ${nomeUsuario}%0A⚽ *TIME:* ${t.nome}%0A💰 *VALOR:* R$ 20,00`;
     window.open(`https://t.me/SEU_USUARIO?text=${etiqueta}`);
   }
-
 
   function modoAdmin() {
     let senha = prompt("Senha:");
@@ -236,4 +216,3 @@
 </script>
 </body>
 </html>
-
